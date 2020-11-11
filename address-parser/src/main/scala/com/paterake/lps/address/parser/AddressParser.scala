@@ -40,7 +40,7 @@ class AddressParser(inputFileName: String) {
     clcnData.sortBy(_._1)
   }
 
-  def processSheet(sheet: Sheet): Unit = {
+  def extractSheet(sheet: Sheet): (Seq[(Int, String)], List[(Int, Seq[(Int, String)])]) = {
     println(sheet.getSheetName)
     var clcnHeader: Seq[(Int, String)] = null
     val clcnData = scala.collection.mutable.ListBuffer.empty[(Int, Seq[(Int, String)])]
@@ -56,12 +56,13 @@ class AddressParser(inputFileName: String) {
     clcnData.foreach(row => {
       println(row._1 + ":" + row._2.mkString(";"))
     })
+    (clcnHeader, clcnData.toList)
   }
 
   def processWorkbook(): Unit = {
     val workbook = new XSSFWorkbook(inputFileStream)
     workbook.sheetIterator().asScala.foreach(f => {
-      processSheet(f)
+      val (clcnHeader, clcnData) = extractSheet(f)
     })
     clcnAddressModel.foreach(line => {
       print(line._1 + "...")
