@@ -3,14 +3,19 @@ package com.paterake.lps.address.parser
 import java.io.FileInputStream
 
 import org.apache.poi.ss.usermodel.{Cell, CellType, Row, Sheet}
-import org.apache.poi.xssf.usermodel.{XSSFCell, XSSFWorkbook}
-
-import scala.collection.mutable
-import scala.collection.mutable.{ArrayBuffer, ListBuffer}
+import org.apache.poi.ss.util.CellReference
+import org.apache.poi.xssf.usermodel.XSSFWorkbook
 
 class AddressParser(inputFileName: String) {
+
   import scala.collection.JavaConverters._
+
   val inputFileStream = new FileInputStream(inputFileName)
+  val clcnAddressModel: Seq[(Int, Array[String])] = new AddressModel().getAddressCfg()
+
+  def getColumnIndex(columnName: String): Int = {
+    CellReference.convertColStringToIndex(columnName)
+  }
 
   def getCellValue(cell: Cell): String = {
     cell.getCellType match {
@@ -53,11 +58,25 @@ class AddressParser(inputFileName: String) {
     })
   }
 
-  def processWorkbook() : Unit = {
+  def processWorkbook(): Unit = {
     val workbook = new XSSFWorkbook(inputFileStream)
     workbook.sheetIterator().asScala.foreach(f => {
       processSheet(f)
     })
+    clcnAddressModel.foreach(line => {
+      print(line._1 + "...")
+      line._2.foreach(col => {
+        val colName =
+          if (col.startsWith("(")) {
+            col.replaceAll("^.|.$", "")
+          } else {
+            col
+          }
+        print(getColumnIndex(colName) + ":")
+      })
+      println("")
+    })
+    //println(getColumnIndex("A"))
   }
 }
 
