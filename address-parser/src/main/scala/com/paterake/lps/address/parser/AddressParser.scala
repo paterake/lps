@@ -1,13 +1,16 @@
 package com.paterake.lps.address.parser
 
-import java.io.FileInputStream
+import java.io.{FileInputStream, FileOutputStream}
 
+import com.itextpdf.io.font.constants.StandardFonts
+import com.itextpdf.kernel.font.{PdfFont, PdfFontFactory}
+import com.itextpdf.layout.element.Paragraph
 import com.paterake.lps.address.model.{AddressModel, FormatModel}
 import org.apache.poi.ss.usermodel.{Cell, CellType, Row, Sheet}
 import org.apache.poi.ss.util.CellReference
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 
-class AddressParser(inputFileName: String) {
+class AddressParser(inputFileName: String, outputFileName: String) {
 
   import scala.collection.JavaConverters._
 
@@ -27,11 +30,17 @@ class AddressParser(inputFileName: String) {
   }
 
   def getHeaderRow(row: Row): Seq[(Int, String)] = {
-    row.
+    println(row.getLastCellNum)
     val clcnData = scala.collection.mutable.ListBuffer.empty[(Int, String)]
+    (0 to row.getLastCellNum).foreach(idx => {
+      val cell = row.getCell(idx, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK)
+      clcnData.append((idx, getCellValue(cell)))
+    })
+    /*
     row.iterator().asScala.zipWithIndex.foreach(cell => {
       clcnData.append((cell._2, cell._1.getStringCellValue.trim))
     })
+    */
     clcnData.sortBy(_._1)
   }
 
@@ -98,7 +107,7 @@ class AddressParser(inputFileName: String) {
       x.mkString(" ")
     }).map(x => {
       x.trim.replaceAll(" +", " ")
-    }).filter(x => x.length > 0)
+    }) //.filter(x => x.length > 0)
     println(entry)
     entry
   }
@@ -110,18 +119,82 @@ class AddressParser(inputFileName: String) {
     clcnAddressBook
   }
 
+  def getDocumentFontSize(): Map[Int, Int] = {
+    val clcnFontSize = scala.collection.mutable.Map[Int, Int]()
+    clcnFontSize += (clcnFontSize.size -> 18)
+    clcnFontSize += (clcnFontSize.size -> 12)
+    clcnFontSize += (clcnFontSize.size -> 8)
+    clcnFontSize += (clcnFontSize.size -> 8)
+    clcnFontSize += (clcnFontSize.size -> 8)
+    clcnFontSize += (clcnFontSize.size -> 12)
+    clcnFontSize.toMap
+  }
+
+  def getDocumentFont(): Map[Int, PdfFont] = {
+    val clcnFont = scala.collection.mutable.Map[Int, PdfFont]()
+    clcnFont += (clcnFont.size -> PdfFontFactory.createFont(StandardFonts.TIMES_BOLD))
+    clcnFont += (clcnFont.size -> PdfFontFactory.createFont(StandardFonts.TIMES_BOLD))
+    clcnFont += (clcnFont.size -> PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN))
+    clcnFont += (clcnFont.size -> PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN))
+    clcnFont += (clcnFont.size -> PdfFontFactory.createFont(StandardFonts.TIMES_ITALIC))
+    clcnFont += (clcnFont.size -> PdfFontFactory.createFont(StandardFonts.TIMES_ITALIC))
+    clcnFont.toMap
+  }
+
+  def getAlignedParagraph(text: String, alignment: Int): Paragraph = {
+    val paragraph = new Paragraph(text)
+    paragraph.setAlignment(alignment)
+    paragraph
+  }
+
+  def getDocumentAlignment(): Map[Int, Int] = {
+    val clcnAlignment = scala.collection.mutable.Map[Int, Int]()
+    clcnAlignment += (clcnAlignment.size -> Element.ALIGN_LEFT)
+    clcnAlignment += (clcnAlignment.size -> Element.ALIGN_LEFT)
+    clcnAlignment += (clcnAlignment.size -> Element.ALIGN_LEFT)
+    clcnAlignment += (clcnAlignment.size -> Element.ALIGN_LEFT)
+    clcnAlignment += (clcnAlignment.size -> Element.ALIGN_LEFT)
+    clcnAlignment += (clcnAlignment.size -> Element.ALIGN_CENTER)
+    clcnAlignment.toMap
+  }
+
+  def convertToPdf(clcnAddressBook: List[Seq[String]]): Unit = {
+    val clcnFont = getDocumentFont()
+    val clcnAlignment = getDocumentAlignment()
+    val document = new Document(PageSize.A5)
+    val writer = PdfWriter.getInstance(document, new FileOutputStream(outputFileName))
+    document.open()
+    clcnAddressBook.foreach(entry => {
+      entry.zipWithIndex.foreach(line => {
+        val font = clcnFont(line._2)
+        val alignment = clcnAlignment(line._2)
+        if (line._1.size > 0) {
+          val paragraph = getAlignedParagraph(line._1, alignment)
+        }
+      })
+    })
+    document.add(new Paragraph("First Page."))
+    document.setPageSize(PageSize.A5)
+    document.newPage()
+    document.add(new Paragraph("This PageSize is DIN A5."))
+    document.close()
+    writer.close()
+  }
+
   def processWorkbook(): Unit = {
     val workbook = new XSSFWorkbook(inputFileStream)
-
     workbook.sheetIterator().asScala.foreach(f => {
       val (clcnHeader, clcnData) = extractSheet(f)
       val clcnAddressBook = setAddressBook(clcnHeader, clcnData)
       println(clcnAddressBook)
+      convertToPdf(clcnAddressBook)
     })
   }
 }
 
 object AddressParser extends App {
-  val parser = new AddressParser("/Users/rrpate/Downloads/Template4Coder.xlsx")
+  val sourceFileName = "/Users/rrpate/Downloads/Template4Coder.xlsx"
+  val targetFileName = "/Users/rrpate/Documents/samplePdf.pdf"
+  val parser = new AddressParser(sourceFileName, targetFileName)
   parser.processWorkbook()
 }
