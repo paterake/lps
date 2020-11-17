@@ -1,4 +1,4 @@
-package com.paterake.lps.address.parser
+package com.paterake.lps.address.model
 
 import scala.collection.mutable.ListBuffer
 
