@@ -1,10 +1,16 @@
 package com.paterake.lps.address.parser
 
-import java.io.{FileInputStream, FileOutputStream}
+import java.io.FileInputStream
 
 import com.itextpdf.io.font.constants.StandardFonts
+import com.itextpdf.kernel.colors.ColorConstants
 import com.itextpdf.kernel.font.{PdfFont, PdfFontFactory}
-import com.itextpdf.layout.element.Paragraph
+import com.itextpdf.kernel.geom.PageSize
+import com.itextpdf.kernel.pdf.canvas.draw.SolidLine
+import com.itextpdf.kernel.pdf.{PdfDocument, PdfWriter}
+import com.itextpdf.layout.Document
+import com.itextpdf.layout.element.{LineSeparator, Paragraph, Text}
+import com.itextpdf.layout.property.TextAlignment
 import com.paterake.lps.address.model.{AddressModel, FormatModel}
 import org.apache.poi.ss.usermodel.{Cell, CellType, Row, Sheet}
 import org.apache.poi.ss.util.CellReference
@@ -37,6 +43,7 @@ class AddressParser(inputFileName: String, outputFileName: String) {
       clcnData.append((idx, getCellValue(cell)))
     })
     /*
+    -- Skips empty cells
     row.iterator().asScala.zipWithIndex.foreach(cell => {
       clcnData.append((cell._2, cell._1.getStringCellValue.trim))
     })
@@ -119,19 +126,9 @@ class AddressParser(inputFileName: String, outputFileName: String) {
     clcnAddressBook
   }
 
-  def getDocumentFontSize(): Map[Int, Int] = {
-    val clcnFontSize = scala.collection.mutable.Map[Int, Int]()
-    clcnFontSize += (clcnFontSize.size -> 18)
-    clcnFontSize += (clcnFontSize.size -> 12)
-    clcnFontSize += (clcnFontSize.size -> 8)
-    clcnFontSize += (clcnFontSize.size -> 8)
-    clcnFontSize += (clcnFontSize.size -> 8)
-    clcnFontSize += (clcnFontSize.size -> 12)
-    clcnFontSize.toMap
-  }
-
   def getDocumentFont(): Map[Int, PdfFont] = {
     val clcnFont = scala.collection.mutable.Map[Int, PdfFont]()
+    clcnFont += (clcnFont.size -> PdfFontFactory.createFont(StandardFonts.TIMES_BOLD))
     clcnFont += (clcnFont.size -> PdfFontFactory.createFont(StandardFonts.TIMES_BOLD))
     clcnFont += (clcnFont.size -> PdfFontFactory.createFont(StandardFonts.TIMES_BOLD))
     clcnFont += (clcnFont.size -> PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN))
@@ -141,44 +138,75 @@ class AddressParser(inputFileName: String, outputFileName: String) {
     clcnFont.toMap
   }
 
-  def getAlignedParagraph(text: String, alignment: Int): Paragraph = {
-    val paragraph = new Paragraph(text)
-    paragraph.setAlignment(alignment)
-    paragraph
+  def getDocumentFontSize(): Map[Int, Int] = {
+    val clcnFontSize = scala.collection.mutable.Map[Int, Int]()
+    clcnFontSize += (clcnFontSize.size -> 18)
+    clcnFontSize += (clcnFontSize.size -> 18)
+    clcnFontSize += (clcnFontSize.size -> 12)
+    clcnFontSize += (clcnFontSize.size -> 8)
+    clcnFontSize += (clcnFontSize.size -> 8)
+    clcnFontSize += (clcnFontSize.size -> 8)
+    clcnFontSize += (clcnFontSize.size -> 12)
+    clcnFontSize.toMap
   }
 
-  def getDocumentAlignment(): Map[Int, Int] = {
-    val clcnAlignment = scala.collection.mutable.Map[Int, Int]()
-    clcnAlignment += (clcnAlignment.size -> Element.ALIGN_LEFT)
-    clcnAlignment += (clcnAlignment.size -> Element.ALIGN_LEFT)
-    clcnAlignment += (clcnAlignment.size -> Element.ALIGN_LEFT)
-    clcnAlignment += (clcnAlignment.size -> Element.ALIGN_LEFT)
-    clcnAlignment += (clcnAlignment.size -> Element.ALIGN_LEFT)
-    clcnAlignment += (clcnAlignment.size -> Element.ALIGN_CENTER)
+  def getDocumentAlignment(): Map[Int, TextAlignment] = {
+    val clcnAlignment = scala.collection.mutable.Map[Int, TextAlignment]()
+    clcnAlignment += (clcnAlignment.size -> TextAlignment.CENTER)
+    clcnAlignment += (clcnAlignment.size -> TextAlignment.LEFT)
+    clcnAlignment += (clcnAlignment.size -> TextAlignment.LEFT)
+    clcnAlignment += (clcnAlignment.size -> TextAlignment.LEFT)
+    clcnAlignment += (clcnAlignment.size -> TextAlignment.LEFT)
+    clcnAlignment += (clcnAlignment.size -> TextAlignment.LEFT)
+    clcnAlignment += (clcnAlignment.size -> TextAlignment.RIGHT)
     clcnAlignment.toMap
+  }
+
+  def getParagraph(alignment: TextAlignment, fontSize: Int): Paragraph = {
+    val paragraph = new Paragraph()
+    paragraph.setTextAlignment(alignment)
+    paragraph.setFontSize(fontSize)
+    paragraph
   }
 
   def convertToPdf(clcnAddressBook: List[Seq[String]]): Unit = {
     val clcnFont = getDocumentFont()
+    val clcnFontSize = getDocumentFontSize()
     val clcnAlignment = getDocumentAlignment()
-    val document = new Document(PageSize.A5)
-    val writer = PdfWriter.getInstance(document, new FileOutputStream(outputFileName))
-    document.open()
+    val pdf = new PdfDocument(new PdfWriter(outputFileName))
+    pdf.setDefaultPageSize(PageSize.A5)
+    val document = new Document(pdf)
+
+    var line0 = ""
     clcnAddressBook.foreach(entry => {
       entry.zipWithIndex.foreach(line => {
-        val font = clcnFont(line._2)
-        val alignment = clcnAlignment(line._2)
         if (line._1.size > 0) {
-          val paragraph = getAlignedParagraph(line._1, alignment)
+          val font = clcnFont(line._2)
+          val fontSize = clcnFontSize(line._2)
+          val alignment = clcnAlignment(line._2)
+          val paragraph = getParagraph(alignment, fontSize)
+          val txt = new Text(line._1).setFont(font)
+          if (line._2 == 0) {
+            if (!line0.equals(line._1)) {
+              line0 = line._1
+              paragraph.add(txt)
+              paragraph.setBackgroundColor(ColorConstants.LIGHT_GRAY)
+              paragraph.setFontColor(ColorConstants.WHITE)
+              document.add(paragraph)
+            } else {
+              val line = new SolidLine(1f)
+              line.setColor(ColorConstants.LIGHT_GRAY)
+              val lineSeparator = new LineSeparator(line)
+              document.add(lineSeparator)
+            }
+          } else {
+            paragraph.add(txt)
+            document.add(paragraph)
+          }
         }
       })
     })
-    document.add(new Paragraph("First Page."))
-    document.setPageSize(PageSize.A5)
-    document.newPage()
-    document.add(new Paragraph("This PageSize is DIN A5."))
     document.close()
-    writer.close()
   }
 
   def processWorkbook(): Unit = {
