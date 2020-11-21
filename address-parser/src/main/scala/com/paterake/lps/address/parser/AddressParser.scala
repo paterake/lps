@@ -93,7 +93,17 @@ class AddressParser(inputFileName: String, outputFileName: String) {
   def extractAddressLine(addressLine: (Int, Seq[(Int, String)])): Seq[String] = {
     val entry = clcnCfgAddress.sortBy(line => line.lineId).map(cfg => {
       cfg.clcnLineElement.map(columnName => {
-        addressLine._2.filter(p => getColumnIndex(columnName) == p._1).map(x => x._2)
+        addressLine._2.filter(p => getColumnIndex(columnName) == p._1).map(x => {
+          if (cfg.clcnParenthesis != null && cfg.clcnParenthesis.contains(columnName) && x._2.length > 0) {
+            if (x._2.startsWith("(") && x._2.endsWith(")")) {
+              x._2
+            } else {
+              "(" + x._2 + ")"
+            }
+          } else {
+            x._2
+          }
+        })
       }).map(x => {
         x.mkString(" ")
       })
@@ -101,7 +111,7 @@ class AddressParser(inputFileName: String, outputFileName: String) {
       val sep = clcnCfgAddress(x._2).elementSeparator
       (sep, x._1.mkString(sep))
     }).map(x => {
-      x._2.trim.replaceAll(x._1+"+", x._1).stripSuffix(x._1)
+      x._2.trim.replaceAll(x._1 + "+", x._1).stripSuffix(x._1)
     })
     println(entry)
     entry

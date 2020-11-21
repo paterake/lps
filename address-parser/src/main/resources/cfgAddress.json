@@ -18,6 +18,7 @@
   {
     "lineId": 2,
     "clcnLineElement": ["J", "K", "L", "I", "O"],
+    "clcnParenthesis": ["O"],
     "elementSeparator": " ",
     "font": "Helvetica",
     "fontSize": 8,
