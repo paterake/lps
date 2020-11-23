@@ -42,9 +42,8 @@
             <artifactId>jackson-module-scala_2.11</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.ibm.watson</groupId>
-            <artifactId>language-translator</artifactId>
-            <version>9.0.0</version>
+            <groupId>com.google.cloud</groupId>
+            <artifactId>google-cloud-translate</artifactId>
         </dependency>
 
     </dependencies>

@@ -27,6 +27,7 @@
         <apache.poi.version>4.1.2</apache.poi.version>
         <itext.version>7.1.13</itext.version>
         <jackson.version>2.6.7</jackson.version>
+        <google-api-version>1.95.4</google-api-version>
     </properties>
 
     <dependencyManagement>
@@ -80,6 +81,11 @@
                 <groupId>com.fasterxml.jackson.module</groupId>
                 <artifactId>jackson-module-scala_2.11</artifactId>
                 <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.cloud</groupId>
+                <artifactId>google-cloud-translate</artifactId>
+                <version>${google-api-version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
