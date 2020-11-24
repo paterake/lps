@@ -1,6 +1,6 @@
 package com.paterake.lps.address.parse
 
-import java.io.FileInputStream
+import java.io.File
 
 import com.itextpdf.kernel.colors.ColorConstants
 import com.itextpdf.kernel.font.{PdfFont, PdfFontFactory}
@@ -11,16 +11,14 @@ import com.itextpdf.layout.Document
 import com.itextpdf.layout.element.{LineSeparator, Paragraph, Text}
 import com.itextpdf.layout.property.TextAlignment
 import com.paterake.lps.address.cfg.reader.CfgAddress
-import org.apache.poi.ss.usermodel.{Cell, CellType, Row, Sheet}
+import org.apache.poi.ss.usermodel.{Cell, CellType, Row, Sheet, Workbook, WorkbookFactory}
 import org.apache.poi.ss.util.CellReference
-import org.apache.poi.xssf.usermodel.XSSFWorkbook
 
-class AddressParser(inputFileName: String, outputFileName: String) {
+class AddressParser(cfgName: String, inputFileName: String, outputFileName: String) {
 
   import scala.collection.JavaConverters._
 
-  private val inputFileStream = new FileInputStream(inputFileName)
-  private val clcnCfgAddress = new CfgAddress().getCfg()
+  private val clcnCfgAddress = new CfgAddress(cfgName).getCfg()
 
   def getColumnIndex(columnName: String): Int = {
     CellReference.convertColStringToIndex(columnName)
@@ -181,8 +179,18 @@ class AddressParser(inputFileName: String, outputFileName: String) {
     document.close()
   }
 
-  def processWorkbook(): Unit = {
-    val workbook = new XSSFWorkbook(inputFileStream)
+  def openWorkbook(clcnArg: Array[String]): Workbook = {
+    val workbook =
+      if (clcnArg.size == 1) {
+        WorkbookFactory.create(new File(inputFileName), clcnArg(0));
+      } else {
+        WorkbookFactory.create(new File(inputFileName))
+      }
+    workbook
+  }
+
+  def processWorkbook(clcnArg: Array[String]): Unit = {
+    val workbook = openWorkbook(clcnArg)
     workbook.sheetIterator().asScala.foreach(f => {
       val (clcnHeader, clcnData) = extractSheet(f)
       val clcnAddressBook = setAddressBook(clcnData)
@@ -193,8 +201,9 @@ class AddressParser(inputFileName: String, outputFileName: String) {
 }
 
 object AddressParser extends App {
-  val sourceFileName = "/Users/rrpate/Downloads/Template4Coder.xlsx"
-  val targetFileName = "/Users/rrpate/Documents/samplePdf.pdf"
-  val parser = new AddressParser(sourceFileName, targetFileName)
-  parser.processWorkbook()
+  val cfgName = "cfgAddress_preston"
+  val sourceFileName = "/home/paterak/Downloads/Preston-WalsallStyle-23Nov2020Data for Print.xls"
+  val targetFileName = "/home/paterak/Downloads/preston_walsall.pdf"
+  val parser = new AddressParser(cfgName, sourceFileName, targetFileName)
+  parser.processWorkbook(args)
 }

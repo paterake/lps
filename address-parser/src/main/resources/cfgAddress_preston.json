@@ -1,0 +1,59 @@
+[
+  {
+    "lineId": 0,
+    "clcnLineElement": ["A"],
+    "elementSeparator": " ",
+    "font": "Helvetica-Bold",
+    "fontSize": 12,
+    "textAlignment": "CENTER"
+  },
+  {
+    "lineId": 1,
+    "clcnLineElement": ["C"],
+    "elementSeparator": " ",
+    "font": "Helvetica-Bold",
+    "fontSize": 10,
+    "textAlignment": "LEFT"
+  },
+  {
+    "lineId": 2,
+    "clcnLineElement": ["E", "F"],
+    "clcnParenthesis": ["F"],
+    "elementSeparator": " ",
+    "font": "Helvetica",
+    "fontSize": 8,
+    "textAlignment": "LEFT"
+  },
+  {
+    "lineId": "3",
+    "clcnLineElement": ["M", "N", "O", "P", "Q"],
+    "elementSeparator": ",",
+    "font": "Helvetica",
+    "fontSize": 8,
+    "textAlignment": "LEFT"
+  },
+  {
+    "lineId": 4,
+    "clcnLineElement": ["G"],
+    "elementSeparator": " ",
+    "font": "Helvetica",
+    "fontSize": 8,
+    "textAlignment": "LEFT"
+  },
+  {
+    "lineId": 5,
+    "clcnLineElement": ["K", "L"],
+    "elementSeparator": " ",
+    "font": "Helvetica-Oblique",
+    "fontSize": 8,
+    "textAlignment": "LEFT"
+  },
+  {
+    "lineId": 6,
+    "clcnLineElement": ["H", "I", "J"],
+    "elementSeparator": "/",
+    "font": "Helvetica-Oblique",
+    "fontSize": 8,
+    "textAlignment": "RIGHT"
+  }
+]
