@@ -10,7 +10,9 @@
   {
     "lineId": 1,
     "clcnLineElement": ["C"],
+    "clcnLineElementRight": ["H", "I"],
     "elementSeparator": " ",
+    "elementSeparatorRight": "/",
     "font": "Helvetica-Bold",
     "fontSize": 10,
     "textAlignment": "LEFT"
@@ -19,7 +21,9 @@
     "lineId": 2,
     "clcnLineElement": ["E", "F"],
     "clcnParenthesis": ["F"],
+    "clcnLineElementRight": ["J"],
     "elementSeparator": " ",
+    "elementSeparatorRight": "/",
     "font": "Helvetica",
     "fontSize": 8,
     "textAlignment": "LEFT"

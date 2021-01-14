@@ -88,11 +88,13 @@ class AddressParser(cfgName: String, inputFileName: String, outputFileName: Stri
     (clcnHeader, clcnData.toList)
   }
 
-  def extractAddressLine(addressLine: (Int, Seq[(Int, String)])): Seq[String] = {
-    val entry = clcnCfgAddress.sortBy(line => line.lineId).map(cfg => {
-      cfg.clcnLineElement.map(columnName => {
+  def getEntry(addressLine: (Int, Seq[(Int, String)]), clcnLineElement: List[String], clcnParenthesis: List[String], elementSeparator: String): String = {
+    if (clcnLineElement == null || clcnLineElement.isEmpty) {
+      null
+    } else {
+      clcnLineElement.map(columnName => {
         addressLine._2.filter(p => getColumnIndex(columnName) == p._1).map(x => {
-          if (cfg.clcnParenthesis != null && cfg.clcnParenthesis.contains(columnName) && x._2.length > 0) {
+          if (clcnParenthesis != null && clcnParenthesis.contains(columnName) && x._2.nonEmpty) {
             if (x._2.startsWith("(") && x._2.endsWith(")")) {
               x._2
             } else {
@@ -104,21 +106,24 @@ class AddressParser(cfgName: String, inputFileName: String, outputFileName: Stri
         })
       }).map(x => {
         x.mkString(" ")
-      })
-    }).zipWithIndex.map(x => {
-      val sep = clcnCfgAddress(x._2).elementSeparator
-      (sep, x._1.mkString(sep))
-    }).map(x => {
-      x._2.trim.replaceAll(x._1 + "+", x._1).stripSuffix(x._1)
+      }).mkString(elementSeparator).trim.replaceAll(elementSeparator + "+", elementSeparator).stripSuffix(elementSeparator)
+    }
+  }
+
+  def extractAddressLine(addressLine: (Int, Seq[(Int, String)])): List[(String, String)] = {
+    val entry = clcnCfgAddress.sortBy(line => line.lineId).map(cfg => {
+      val leftEntry = getEntry(addressLine, cfg.clcnLineElement, cfg.clcnParenthesis, cfg.elementSeparator)
+      val rightEntry = getEntry(addressLine, cfg.clcnLineElementRight, cfg.clcnParenthesis, cfg.elementSeparatorRight)
+      (leftEntry, rightEntry)
     })
     println(entry)
     entry
   }
 
-  def setAddressBook(clcnData: List[(Int, Seq[(Int, String)])]): List[Seq[String]] = {
+  def setAddressBook(clcnData: List[(Int, Seq[(Int, String)])]): List[List[(String, String)]] = {
     val clcnAddressBook = clcnData.map(line => {
       extractAddressLine(line)
-    }).sortBy(x => x(0) + x(1))
+    }).sortBy(x => x(0)._1 + x(1)._1)
     clcnAddressBook
   }
 
@@ -141,7 +146,7 @@ class AddressParser(cfgName: String, inputFileName: String, outputFileName: Stri
     paragraph
   }
 
-  def convertToPdf(clcnAddressBook: List[Seq[String]]): Unit = {
+  def convertToPdf(clcnAddressBook: List[List[(String, String)]]): Unit = {
     val (clcnFont, clcnFontSize, clcnAlignment) = getParagraghFormat()
     val pdf = new PdfDocument(new PdfWriter(outputFileName))
     pdf.setDefaultPageSize(PageSize.A5)
@@ -150,15 +155,15 @@ class AddressParser(cfgName: String, inputFileName: String, outputFileName: Stri
     var line0 = ""
     clcnAddressBook.foreach(entry => {
       entry.zipWithIndex.foreach(line => {
-        if (line._1.size > 0) {
+        if (line._1._1.size > 0) {
           val font = clcnFont(line._2)
           val fontSize = clcnFontSize(line._2)
           val alignment = clcnAlignment(line._2)
           val paragraph = getParagraph(alignment, fontSize)
-          val txt = new Text(line._1).setFont(font)
+          val txt = new Text(line._1._1).setFont(font)
           if (line._2 == 0) {
-            if (!line0.equals(line._1)) {
-              line0 = line._1
+            if (!line0.equals(line._1._1)) {
+              line0 = line._1._1
               paragraph.add(txt)
               paragraph.setBackgroundColor(ColorConstants.LIGHT_GRAY)
               paragraph.setFontColor(ColorConstants.WHITE)
