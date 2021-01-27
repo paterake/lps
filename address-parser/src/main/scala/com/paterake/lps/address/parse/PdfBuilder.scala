@@ -1,6 +1,7 @@
 package com.paterake.lps.address.parse
 
 import com.itextpdf.kernel.colors.ColorConstants
+import com.itextpdf.kernel.events.PdfDocumentEvent
 import com.itextpdf.kernel.font.{PdfFont, PdfFontFactory}
 import com.itextpdf.kernel.geom.PageSize
 import com.itextpdf.kernel.pdf.canvas.draw.SolidLine
@@ -30,10 +31,10 @@ class PdfBuilder(outputFileName: String) {
   }
 
   def passwordProtect(password: String): Unit = {
-    val USERPASS = password.getBytes()
-    val OWNERPASS = password.getBytes()
+    val userPwd = password.getBytes()
+    val ownerPwd = password.getBytes()
     val writerProperties = new WriterProperties()
-    writerProperties.setStandardEncryption(USERPASS, OWNERPASS, EncryptionConstants.ALLOW_PRINTING, EncryptionConstants.ENCRYPTION_AES_128);
+    writerProperties.setStandardEncryption(userPwd, ownerPwd, EncryptionConstants.ALLOW_PRINTING, EncryptionConstants.ENCRYPTION_AES_128);
     val pdfReader = new PdfReader(outputFileName + ".pdf")
     val pdfWriter = new PdfWriter(new FileOutputStream(outputFileName + "_protected.pdf"), writerProperties)
     val pdfDocument = new PdfDocument(pdfReader, pdfWriter)
@@ -56,6 +57,7 @@ class PdfBuilder(outputFileName: String) {
     paragraph.add(txt)
     document.add(paragraph)
     println(pdfDocument.getNumberOfPages + ":" + text)
+    //pdfDocument.addEventHandler(PdfDocumentEvent.START_PAGE, paragraph);
   }
 
   def getParagraghFormat(clcnCfgAddress: List[ModelCfgAddress]): (Map[Int, PdfFont], Map[Int, Int], Map[Int, TextAlignment], Map[Int, PdfFont], Map[Int, Int], Map[Int, TextAlignment]) = {
@@ -139,6 +141,9 @@ class PdfBuilder(outputFileName: String) {
               table.addCell(getCell(txt, TextAlignment.LEFT, fontSize))
               table.addCell(getCell(txtRight, TextAlignment.RIGHT, fontSizeRight))
               document.add(table)
+              if (clcnCfgAddress(line._2).indexInd) {
+                println(entry(0)._1 + ":" + line._1._1 + ":" + pdfDocument.getNumberOfPages)
+              }
             }
           }
         }

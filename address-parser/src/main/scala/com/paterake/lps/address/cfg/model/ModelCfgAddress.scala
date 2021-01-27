@@ -12,4 +12,5 @@ case class ModelCfgAddress(lineId: Int
                            , fontRight: String
                            , fontSizeRight: Int
                            , textAlignmentRight: String
+                           , indexInd: Boolean
                           )
