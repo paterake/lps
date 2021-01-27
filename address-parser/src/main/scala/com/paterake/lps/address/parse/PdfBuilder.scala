@@ -4,26 +4,58 @@ import com.itextpdf.kernel.colors.ColorConstants
 import com.itextpdf.kernel.font.{PdfFont, PdfFontFactory}
 import com.itextpdf.kernel.geom.PageSize
 import com.itextpdf.kernel.pdf.canvas.draw.SolidLine
-import com.itextpdf.kernel.pdf.{PdfDocument, PdfWriter}
+import com.itextpdf.kernel.pdf.{EncryptionConstants, PdfDocument, PdfReader, PdfWriter, WriterProperties}
 import com.itextpdf.layout.Document
 import com.itextpdf.layout.borders.Border
-import com.itextpdf.layout.element.{Cell, LineSeparator, Paragraph, Table, Text}
-import com.itextpdf.layout.property.TextAlignment
+import com.itextpdf.layout.element.{AreaBreak, Cell, LineSeparator, Paragraph, Table, Text}
+import com.itextpdf.layout.property.{AreaBreakType, TextAlignment}
 import com.paterake.lps.address.cfg.model.ModelCfgAddress
+
+import java.io.FileOutputStream
 
 class PdfBuilder(outputFileName: String) {
 
-  private val document = getDocument()
+  private val pdfDocument = getPdfDocument()
+  private val document = getNewDocument()
 
-  def getDocument(): Document = {
-    val pdf = new PdfDocument(new PdfWriter(outputFileName))
+  def getPdfDocument(): PdfDocument = {
+    val pdf = new PdfDocument(new PdfWriter(outputFileName + ".pdf"))
     pdf.setDefaultPageSize(PageSize.A5)
-    val document = new Document(pdf)
+    pdf
+  }
+
+  def getNewDocument(): Document = {
+    val document = new Document(pdfDocument)
     document
+  }
+
+  def passwordProtect(password: String): Unit = {
+    val USERPASS = password.getBytes()
+    val OWNERPASS = password.getBytes()
+    val writerProperties = new WriterProperties()
+    writerProperties.setStandardEncryption(USERPASS, OWNERPASS, EncryptionConstants.ALLOW_PRINTING, EncryptionConstants.ENCRYPTION_AES_128);
+    val pdfReader = new PdfReader(outputFileName + ".pdf")
+    val pdfWriter = new PdfWriter(new FileOutputStream(outputFileName + "_protected.pdf"), writerProperties)
+    val pdfDocument = new PdfDocument(pdfReader, pdfWriter)
+    pdfDocument.close()
+  }
+
+  def closeDocument(password: String): Unit = {
+    document.close()
+    passwordProtect(password)
   }
 
   def closeDocument(): Unit = {
     document.close()
+  }
+
+  def startNewPage(text: String): Unit = {
+    document.add(new AreaBreak(AreaBreakType.NEXT_PAGE))
+    val paragraph = getParagraph(TextAlignment.LEFT, 12)
+    val txt = new Text(text).setFont(PdfFontFactory.createFont("Helvetica-Bold"))
+    paragraph.add(txt)
+    document.add(paragraph)
+    println(pdfDocument.getNumberOfPages + ":" + text)
   }
 
   def getParagraghFormat(clcnCfgAddress: List[ModelCfgAddress]): (Map[Int, PdfFont], Map[Int, Int], Map[Int, TextAlignment], Map[Int, PdfFont], Map[Int, Int], Map[Int, TextAlignment]) = {

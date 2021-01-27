@@ -78,20 +78,25 @@ class AddressParser(cfgName: String, inputFileName: String, outputFileName: Stri
     val pdfBuilder = new PdfBuilder(outputFileName)
     val workbook = openWorkbook(clcnArg)
     workbook.sheetIterator().asScala.foreach(f => {
+      pdfBuilder.startNewPage(f.getSheetName)
       val (clcnHeader, clcnData) = SpreadsheetReader.extractSheet(f)
       val clcnAddressBook = setAddressBook(clcnData)
       //println(clcnAddressBook)
       pdfBuilder.convertToPdf(clcnCfgAddress, clcnAddressBook)
     })
-    pdfBuilder.closeDocument()
+    if (clcnArg.length == 1) {
+      pdfBuilder.closeDocument(clcnArg(0))
+    } else {
+      pdfBuilder.closeDocument()
+    }
   }
 
 }
 
 object AddressParser extends App {
   val cfgName = "cfgAddress_preston"
-  val sourceFileName = "/home/paterake/Downloads/Preston-WalsallStyle-23Nov2020Data for Print.xls"
-  val targetFileName = "/home/paterake/Downloads/preston_walsall.pdf"
+  val sourceFileName = "/home/paterake/Downloads/Master sheet V1 - For RCP PDF production.xlsx"
+  val targetFileName = "/home/paterake/Downloads/lps_draft"
   val parser = new AddressParser(cfgName, sourceFileName, targetFileName)
   parser.processWorkbook(args)
 }

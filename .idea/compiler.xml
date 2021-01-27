@@ -12,7 +12,6 @@
     <bytecodeTargetLevel>
       <module name="address-parser" target="1.8" />
       <module name="lps" target="1.8" />
-      <module name="lps_parser" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
