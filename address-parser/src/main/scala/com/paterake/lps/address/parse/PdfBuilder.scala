@@ -52,7 +52,7 @@ class PdfBuilder(outputFileName: String) {
 
   def startNewPage(text: String): Unit = {
     document.add(new AreaBreak(AreaBreakType.NEXT_PAGE))
-    val paragraph = getParagraph(TextAlignment.LEFT, 12)
+    val paragraph = getParagraph(TextAlignment.CENTER, 12)
     val txt = new Text(text).setFont(PdfFontFactory.createFont("Helvetica-Bold"))
     paragraph.add(txt)
     document.add(paragraph)
@@ -122,10 +122,13 @@ class PdfBuilder(outputFileName: String) {
               paragraph.setFontColor(ColorConstants.WHITE)
               document.add(paragraph)
             } else {
+              val paragraph = new Paragraph("")
+              paragraph.setFixedLeading(1f)
               val line = new SolidLine(1f)
               line.setColor(ColorConstants.LIGHT_GRAY)
               val lineSeparator = new LineSeparator(line)
               document.add(lineSeparator)
+              document.add(paragraph)
             }
           } else {
             if (line._1._2 == null) {

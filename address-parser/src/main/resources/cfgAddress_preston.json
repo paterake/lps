@@ -26,7 +26,7 @@
     "clcnLineElement": ["E", "F"],
     "clcnParenthesis": ["F"],
     "elementSeparator": " ",
-    "font": "Helvetica",
+    "font": "Helvetica-Bold",
     "fontSize": 8,
     "textAlignment": "LEFT",
     "clcnLineElementRight": ["J"],
@@ -49,7 +49,7 @@
     "clcnLineElement": ["G"],
     "elementSeparator": " ",
     "font": "Helvetica",
-    "fontSize": 8,
+    "fontSize": 7,
     "textAlignment": "LEFT",
     "clcnLineElementRight": ["H"],
     "elementSeparatorRight": "/",
@@ -61,7 +61,7 @@
     "lineId": 5,
     "clcnLineElement": ["K", "L"],
     "elementSeparator": " ",
-    "font": "Helvetica-Oblique",
+    "font": "Helvetica",
     "fontSize": 8,
     "textAlignment": "LEFT"
   }
