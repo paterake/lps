@@ -14,7 +14,7 @@
     "font": "Helvetica-Bold",
     "fontSize": 10,
     "textAlignment": "LEFT",
-    "clcnLineElementRight": ["H", "I"],
+    "clcnLineElementRight": ["I"],
     "elementSeparatorRight": "/",
     "fontRight": "Helvetica-Oblique",
     "fontSizeRight": 8,
@@ -50,7 +50,12 @@
     "elementSeparator": " ",
     "font": "Helvetica",
     "fontSize": 8,
-    "textAlignment": "LEFT"
+    "textAlignment": "LEFT",
+    "clcnLineElementRight": ["H"],
+    "elementSeparatorRight": "/",
+    "fontRight": "Helvetica-Oblique",
+    "fontSizeRight": 8,
+    "textAlignmentRight": "LEFT"
   },
   {
     "lineId": 5,
