@@ -16,7 +16,7 @@
     "textAlignment": "LEFT",
     "clcnLineElementRight": ["I"],
     "elementSeparatorRight": "/",
-    "fontRight": "Helvetica-Oblique",
+    "fontRight": "Helvetica-Bold",
     "fontSizeRight": 8,
     "textAlignmentRight": "LEFT",
     "indexInd": true
@@ -31,7 +31,7 @@
     "textAlignment": "LEFT",
     "clcnLineElementRight": ["J"],
     "elementSeparatorRight": "/",
-    "fontRight": "Helvetica-Oblique",
+    "fontRight": "Helvetica-Bold",
     "fontSizeRight": 8,
     "textAlignmentRight": "LEFT",
     "indexInd": true
@@ -39,7 +39,7 @@
   {
     "lineId": "3",
     "clcnLineElement": ["M", "N", "O", "P", "Q"],
-    "elementSeparator": ",",
+    "elementSeparator": ", ",
     "font": "Helvetica",
     "fontSize": 8,
     "textAlignment": "LEFT"
@@ -53,7 +53,7 @@
     "textAlignment": "LEFT",
     "clcnLineElementRight": ["H"],
     "elementSeparatorRight": "/",
-    "fontRight": "Helvetica-Oblique",
+    "fontRight": "Helvetica-Bold",
     "fontSizeRight": 8,
     "textAlignmentRight": "LEFT"
   },

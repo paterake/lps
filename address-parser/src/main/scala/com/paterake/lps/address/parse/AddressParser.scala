@@ -29,7 +29,7 @@ class AddressParser(cfgName: String, inputFileName: String, outputFileName: Stri
     if (clcnLineElement == null || clcnLineElement.isEmpty) {
       null
     } else {
-      clcnLineElement.map(columnName => {
+      val clcnEntry = clcnLineElement.map(columnName => {
         addressLine._2.filter(p => SpreadsheetReader.getColumnIndex(columnName) == p._1).map(x => {
           if (clcnParenthesis != null && clcnParenthesis.contains(columnName) && x._2.nonEmpty) {
             if (x._2.startsWith("(") && x._2.endsWith(")")) {
@@ -43,7 +43,9 @@ class AddressParser(cfgName: String, inputFileName: String, outputFileName: Stri
         })
       }).map(x => {
         x.mkString(" ")
-      }).mkString(elementSeparator).trim.replaceAll(elementSeparator + "+", elementSeparator).stripSuffix(elementSeparator)
+      })
+      val entry = clcnEntry.filter(p => p.nonEmpty).mkString(elementSeparator)
+      entry
     }
   }
 

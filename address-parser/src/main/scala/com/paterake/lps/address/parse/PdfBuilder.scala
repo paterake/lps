@@ -112,12 +112,11 @@ class PdfBuilder(outputFileName: String) {
           val font = clcnFont(line._2)
           val fontSize = clcnFontSize(line._2)
           val alignment = clcnAlignment(line._2)
-
-          val paragraph = getParagraph(alignment, fontSize)
           val txt = new Text(line._1._1).setFont(font)
           if (line._2 == 0) {
             if (!line0.equals(line._1._1)) {
               line0 = line._1._1
+              val paragraph = getParagraph(alignment, fontSize)
               paragraph.add(txt)
               paragraph.setBackgroundColor(ColorConstants.LIGHT_GRAY)
               paragraph.setFontColor(ColorConstants.WHITE)
@@ -130,8 +129,9 @@ class PdfBuilder(outputFileName: String) {
             }
           } else {
             if (line._1._2 == null) {
-              paragraph.add(txt)
-              document.add(paragraph)
+              val table = new Table(1).useAllAvailableWidth()
+              table.addCell(getCell(txt, TextAlignment.LEFT, fontSize))
+              document.add(table)
             } else {
               val fontRight = clcnFontRight(line._2)
               val fontSizeRight = clcnFontSizeRight(line._2)
