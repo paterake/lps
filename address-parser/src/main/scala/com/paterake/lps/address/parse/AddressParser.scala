@@ -62,7 +62,13 @@ class AddressParser(cfgName: String, inputFileName: String, outputFileName: Stri
   def setAddressBook(clcnData: List[(Int, Seq[(Int, String)])]): List[List[(String, String)]] = {
     val clcnAddressBook = clcnData.map(line => {
       extractAddressLine(line)
-    }).sortBy(x => x(0)._1 + x(1)._1)
+    }).filter(p => p(0)._1 != null && p(0)._1 != "").sortBy(x => {
+      if (x(0)._1.toLowerCase.startsWith("social") || x(0)._1.toLowerCase.startsWith("overseas")) {
+        "zzz" + x(0)._1 + x(1)._1
+      } else {
+        x(0)._1 + x(1)._1
+      }
+    })
     clcnAddressBook
   }
 
@@ -97,7 +103,7 @@ class AddressParser(cfgName: String, inputFileName: String, outputFileName: Stri
 
 object AddressParser extends App {
   val cfgName = "cfgAddress_preston"
-  val sourceFileName = "/home/paterake/Downloads/Master sheet V1 - For RCP PDF production.xlsx"
+  val sourceFileName = "/home/paterake/Downloads/Master sheet V2.2 All regions - For RCP PDF production 31 Jan 2021.xlsx"
   val targetFileName = "/home/paterake/Downloads/lps_draft"
   val parser = new AddressParser(cfgName, sourceFileName, targetFileName)
   parser.processWorkbook(args)
