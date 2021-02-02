@@ -55,7 +55,7 @@ class AddressParser(cfgName: String, inputFileName: String, outputFileName: Stri
       val rightEntry = getEntry(addressLine, cfg.clcnLineElementRight, cfg.clcnParenthesis, cfg.elementSeparatorRight)
       (leftEntry, rightEntry)
     })
-    println(entry)
+    //println(entry)
     entry
   }
 
@@ -90,7 +90,7 @@ class AddressParser(cfgName: String, inputFileName: String, outputFileName: Stri
       val (clcnHeader, clcnData) = SpreadsheetReader.extractSheet(f)
       val clcnAddressBook = setAddressBook(clcnData)
       //println(clcnAddressBook)
-      pdfBuilder.convertToPdf(clcnCfgAddress, clcnAddressBook)
+      pdfBuilder.convertToPdf(f.getSheetName, clcnCfgAddress, clcnAddressBook)
     })
     if (clcnArg.length == 1) {
       pdfBuilder.closeDocument(clcnArg(0))

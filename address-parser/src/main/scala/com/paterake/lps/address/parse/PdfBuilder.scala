@@ -1,14 +1,14 @@
 package com.paterake.lps.address.parse
 
 import com.itextpdf.kernel.colors.ColorConstants
-import com.itextpdf.kernel.events.PdfDocumentEvent
 import com.itextpdf.kernel.font.{PdfFont, PdfFontFactory}
-import com.itextpdf.kernel.geom.PageSize
+import com.itextpdf.kernel.geom.{PageSize, Rectangle}
 import com.itextpdf.kernel.pdf.canvas.draw.SolidLine
 import com.itextpdf.kernel.pdf.{EncryptionConstants, PdfDocument, PdfReader, PdfWriter, WriterProperties}
 import com.itextpdf.layout.Document
 import com.itextpdf.layout.borders.Border
 import com.itextpdf.layout.element.{AreaBreak, Cell, LineSeparator, Paragraph, Table, Text}
+import com.itextpdf.layout.layout.{LayoutArea, LayoutContext}
 import com.itextpdf.layout.property.{AreaBreakType, TextAlignment}
 import com.paterake.lps.address.cfg.model.ModelCfgAddress
 
@@ -18,6 +18,8 @@ class PdfBuilder(outputFileName: String) {
 
   private val pdfDocument = getPdfDocument()
   private val document = getNewDocument()
+  private val maxLineCount = 30
+  private var lineCount = 0
 
   def getPdfDocument(): PdfDocument = {
     val pdf = new PdfDocument(new PdfWriter(outputFileName + ".pdf"))
@@ -50,14 +52,61 @@ class PdfBuilder(outputFileName: String) {
     document.close()
   }
 
-  def startNewPage(text: String): Unit = {
+  def resetLineCount(): Unit = {
+    lineCount = 0
+  }
+
+  def incrementLineCount(): Unit = {
+    lineCount += 1
+  }
+
+  def getParagraph(alignment: TextAlignment, fontSize: Int): Paragraph = {
+    val paragraph = new Paragraph()
+    paragraph.setTextAlignment(alignment)
+    paragraph.setFontSize(fontSize)
+    paragraph
+  }
+
+  def startNewPage(header: String): Unit = {
     document.add(new AreaBreak(AreaBreakType.NEXT_PAGE))
     val paragraph = getParagraph(TextAlignment.CENTER, 12)
-    val txt = new Text(text).setFont(PdfFontFactory.createFont("Helvetica-Bold"))
+    val txt = new Text(header).setFont(PdfFontFactory.createFont("Helvetica-Bold"))
     paragraph.add(txt)
     document.add(paragraph)
-    println(pdfDocument.getNumberOfPages + ":" + text)
-    //pdfDocument.addEventHandler(PdfDocumentEvent.START_PAGE, paragraph);
+    println(pdfDocument.getNumberOfPages + ":" + header)
+    resetLineCount()
+    incrementLineCount()
+  }
+
+  def setSubHeader(subHeaderText: Text, alignment: TextAlignment, fontSize: Int): Unit = {
+    val paragraph = getParagraph(alignment, fontSize)
+    paragraph.add(subHeaderText)
+    paragraph.setBackgroundColor(ColorConstants.LIGHT_GRAY)
+    paragraph.setFontColor(ColorConstants.WHITE)
+    document.add(paragraph)
+    incrementLineCount()
+  }
+
+  def setSubHeaderAsLine(): Unit = {
+    val paragraph = new Paragraph("")
+    paragraph.setFixedLeading(1f)
+    val line = new SolidLine(1f)
+    line.setColor(ColorConstants.LIGHT_GRAY)
+    val lineSeparator = new LineSeparator(line)
+    document.add(lineSeparator)
+    document.add(paragraph)
+    incrementLineCount()
+  }
+
+  def addSeperator(txt: Text, line0: String, line: ((String, String), Int), alignment: TextAlignment, fontSize: Int): String = {
+    if (!line0.equals(line._1._1) || (lineCount == 1)) {
+      val line0Return = line._1._1
+      setSubHeader(txt, alignment, fontSize)
+      line0Return
+    } else {
+      setSubHeaderAsLine()
+      line0
+    }
   }
 
   def getParagraghFormat(clcnCfgAddress: List[ModelCfgAddress]): (Map[Int, PdfFont], Map[Int, Int], Map[Int, TextAlignment], Map[Int, PdfFont], Map[Int, Int], Map[Int, TextAlignment]) = {
@@ -85,13 +134,6 @@ class PdfBuilder(outputFileName: String) {
     (clcnFont.toMap, clcnFontSize.toMap, clcnAlignment.toMap, clcnFontRight.toMap, clcnFontSizeRight.toMap, clcnAlignmentRight.toMap)
   }
 
-  def getParagraph(alignment: TextAlignment, fontSize: Int): Paragraph = {
-    val paragraph = new Paragraph()
-    paragraph.setTextAlignment(alignment)
-    paragraph.setFontSize(fontSize)
-    paragraph
-  }
-
   def getCell(text: Text, alignment: TextAlignment, fontSize: Int): Cell = {
     val paragraph = getParagraph(alignment, fontSize)
     paragraph.add(text)
@@ -102,11 +144,14 @@ class PdfBuilder(outputFileName: String) {
     cell
   }
 
-  def convertToPdf(clcnCfgAddress: List[ModelCfgAddress], clcnAddressBook: List[List[(String, String)]]): Unit = {
+  def convertToPdf(header: String, clcnCfgAddress: List[ModelCfgAddress], clcnAddressBook: List[List[(String, String)]]): Unit = {
     val (clcnFont, clcnFontSize, clcnAlignment, clcnFontRight, clcnFontSizeRight, clcnAlignmentRight) = getParagraghFormat(clcnCfgAddress)
 
     var line0 = ""
     clcnAddressBook.foreach(entry => {
+      if (lineCount >= maxLineCount) {
+        startNewPage(header + " (continued)")
+      }
       entry.zipWithIndex.foreach(line => {
         if (line._1._1.nonEmpty) {
           val font = clcnFont(line._2)
@@ -114,27 +159,14 @@ class PdfBuilder(outputFileName: String) {
           val alignment = clcnAlignment(line._2)
           val txt = new Text(line._1._1).setFont(font)
           if (line._2 == 0) {
-            if (!line0.equals(line._1._1)) {
-              line0 = line._1._1
-              val paragraph = getParagraph(alignment, fontSize)
-              paragraph.add(txt)
-              paragraph.setBackgroundColor(ColorConstants.LIGHT_GRAY)
-              paragraph.setFontColor(ColorConstants.WHITE)
-              document.add(paragraph)
-            } else {
-              val paragraph = new Paragraph("")
-              paragraph.setFixedLeading(1f)
-              val line = new SolidLine(1f)
-              line.setColor(ColorConstants.LIGHT_GRAY)
-              val lineSeparator = new LineSeparator(line)
-              document.add(lineSeparator)
-              document.add(paragraph)
-            }
+            line0 = addSeperator(txt, line0, line, alignment, fontSize)
           } else {
-            if (line._1._2 == null) {
+            val element = if (line._1._2 == null) {
               val table = new Table(1).useAllAvailableWidth()
               table.addCell(getCell(txt, TextAlignment.LEFT, fontSize))
               document.add(table)
+              incrementLineCount()
+              table
             } else {
               val fontRight = clcnFontRight(line._2)
               val fontSizeRight = clcnFontSizeRight(line._2)
@@ -144,10 +176,20 @@ class PdfBuilder(outputFileName: String) {
               table.addCell(getCell(txt, TextAlignment.LEFT, fontSize))
               table.addCell(getCell(txtRight, TextAlignment.RIGHT, fontSizeRight))
               document.add(table)
+              incrementLineCount()
               if (clcnCfgAddress(line._2).indexInd) {
-                println(entry(0)._1 + ":" + line._1._1 + ":" + pdfDocument.getNumberOfPages)
+                //println(entry(0)._1 + ":" + line._1._1 + ":" + pdfDocument.getNumberOfPages)
               }
+              table
             }
+            val renderer = element.createRendererSubTree().setParent(document.getRenderer())
+            val layoutResult = renderer.layout(new LayoutContext(new LayoutArea(0, new Rectangle(pdfDocument.getDefaultPageSize.getWidth, pdfDocument.getDefaultPageSize.getHeight))))
+            val axisY = layoutResult.getOccupiedArea().getBBox().getY()
+            val axisX = layoutResult.getOccupiedArea().getBBox().getX()
+            //println("Position: " + line._1._1 + ":" + line._1._2 + ":" + axisY + ":" + axisX)
+          }
+          if (line._2 == 1) {
+            println("Position: " + line._1._1 + ":" + line._1._2 + ":" + lineCount)
           }
         }
       })

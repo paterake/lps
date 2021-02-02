@@ -25,7 +25,7 @@ object SpreadsheetReader {
   }
 
   def getHeaderRow(row: Row): Seq[(Int, String)] = {
-    println(row.getLastCellNum)
+    //println(row.getLastCellNum)
     val clcnData = scala.collection.mutable.ListBuffer.empty[(Int, String)]
     (0 to row.getLastCellNum).foreach(idx => {
       val cell = row.getCell(idx, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK)
@@ -44,7 +44,7 @@ object SpreadsheetReader {
   }
 
   def extractSheet(sheet: Sheet): (Seq[(Int, String)], List[(Int, Seq[(Int, String)])]) = {
-    println(sheet.getSheetName)
+    //println(sheet.getSheetName)
     var clcnHeader: Seq[(Int, String)] = null
     val clcnData = scala.collection.mutable.ListBuffer.empty[(Int, Seq[(Int, String)])]
 
