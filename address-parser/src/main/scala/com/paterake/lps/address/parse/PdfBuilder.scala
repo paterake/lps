@@ -182,11 +182,6 @@ class PdfBuilder(outputFileName: String) {
               }
               table
             }
-            val renderer = element.createRendererSubTree().setParent(document.getRenderer())
-            val layoutResult = renderer.layout(new LayoutContext(new LayoutArea(0, new Rectangle(pdfDocument.getDefaultPageSize.getWidth, pdfDocument.getDefaultPageSize.getHeight))))
-            val axisY = layoutResult.getOccupiedArea().getBBox().getY()
-            val axisX = layoutResult.getOccupiedArea().getBBox().getX()
-            //println("Position: " + line._1._1 + ":" + line._1._2 + ":" + axisY + ":" + axisX)
           }
           if (line._2 == 1) {
             println("Position: " + line._1._1 + ":" + line._1._2 + ":" + lineCount)
