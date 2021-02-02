@@ -2,13 +2,12 @@ package com.paterake.lps.address.parse
 
 import com.itextpdf.kernel.colors.ColorConstants
 import com.itextpdf.kernel.font.{PdfFont, PdfFontFactory}
-import com.itextpdf.kernel.geom.{PageSize, Rectangle}
+import com.itextpdf.kernel.geom.PageSize
 import com.itextpdf.kernel.pdf.canvas.draw.SolidLine
 import com.itextpdf.kernel.pdf.{EncryptionConstants, PdfDocument, PdfReader, PdfWriter, WriterProperties}
 import com.itextpdf.layout.Document
 import com.itextpdf.layout.borders.Border
 import com.itextpdf.layout.element.{AreaBreak, Cell, LineSeparator, Paragraph, Table, Text}
-import com.itextpdf.layout.layout.{LayoutArea, LayoutContext}
 import com.itextpdf.layout.property.{AreaBreakType, TextAlignment}
 import com.paterake.lps.address.cfg.model.ModelCfgAddress
 
