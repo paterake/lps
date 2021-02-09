@@ -1,6 +1,7 @@
 package com.paterake.lps.address.parse
 
 import com.itextpdf.kernel.colors.ColorConstants
+import com.itextpdf.kernel.events.PdfDocumentEvent
 import com.itextpdf.kernel.font.{PdfFont, PdfFontFactory}
 import com.itextpdf.kernel.geom.PageSize
 import com.itextpdf.kernel.pdf.canvas.draw.SolidLine
@@ -23,6 +24,7 @@ class PdfBuilder(outputFileName: String) {
   def getPdfDocument(): PdfDocument = {
     val pdf = new PdfDocument(new PdfWriter(outputFileName + ".pdf"))
     pdf.setDefaultPageSize(PageSize.A5)
+    pdf.addEventHandler(PdfDocumentEvent.END_PAGE, new PdfFooter());
     pdf
   }
 
@@ -66,8 +68,10 @@ class PdfBuilder(outputFileName: String) {
     paragraph
   }
 
-  def startNewPage(header: String): Unit = {
-    document.add(new AreaBreak(AreaBreakType.NEXT_PAGE))
+  def startNewPage(header: String, blankPageCount: Int): Unit = {
+    for (x <- 0 to blankPageCount){
+      document.add(new AreaBreak(AreaBreakType.NEXT_PAGE))
+    }
     val paragraph = getParagraph(TextAlignment.CENTER, 12)
     val txt = new Text(header).setFont(PdfFontFactory.createFont("Helvetica-Bold"))
     paragraph.add(txt)
@@ -149,7 +153,7 @@ class PdfBuilder(outputFileName: String) {
     var line0 = ""
     clcnAddressBook.foreach(entry => {
       if (lineCount >= maxLineCount) {
-        startNewPage(header + " (continued)")
+        startNewPage(header + " (continued)", 0)
       }
       entry.zipWithIndex.foreach(line => {
         if (line._1._1.nonEmpty) {
