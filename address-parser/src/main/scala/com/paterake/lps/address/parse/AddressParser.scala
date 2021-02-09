@@ -1,13 +1,14 @@
 package com.paterake.lps.address.parse
 
 import java.io.File
-import com.paterake.lps.address.cfg.reader.CfgAddress
+import com.paterake.lps.address.cfg.reader.{CfgAddress, CfgRegion}
 import org.apache.poi.ss.usermodel.{Workbook, WorkbookFactory}
 
-class AddressParser(cfgName: String, inputFileName: String, outputFileName: String) {
+class AddressParser(cfgAddressName: String, inputFileName: String, outputFileName: String) {
   import scala.collection.JavaConverters._
 
-  private val clcnCfgAddress = new CfgAddress(cfgName).getCfg()
+  private val clcnCfgAddress = new CfgAddress(cfgAddressName).getCfg()
+  private val cfgRegion = new CfgRegion()
 
   def outputAddressCfg(): Unit = {
     clcnCfgAddress.foreach(line => {
@@ -86,7 +87,8 @@ class AddressParser(cfgName: String, inputFileName: String, outputFileName: Stri
     val pdfBuilder = new PdfBuilder(outputFileName)
     val workbook = openWorkbook(clcnArg)
     workbook.sheetIterator().asScala.foreach(f => {
-      pdfBuilder.startNewPage(f.getSheetName)
+      val region = cfgRegion.getCfg(f.getSheetName)
+      pdfBuilder.startNewPage(f.getSheetName, region.blankPageCount)
       val (clcnHeader, clcnData) = SpreadsheetReader.extractSheet(f)
       val clcnAddressBook = setAddressBook(clcnData)
       //println(clcnAddressBook)
@@ -102,9 +104,9 @@ class AddressParser(cfgName: String, inputFileName: String, outputFileName: Stri
 }
 
 object AddressParser extends App {
-  val cfgName = "cfgAddress"
+  val cfgAddressName = "cfgAddress"
   val sourceFileName = "/home/paterake/Downloads/Master sheet V2.2 All regions - For RCP PDF production 31 Jan 2021.xlsx"
   val targetFileName = "/home/paterake/Downloads/lps_draft"
-  val parser = new AddressParser(cfgName, sourceFileName, targetFileName)
+  val parser = new AddressParser(cfgAddressName, sourceFileName, targetFileName)
   parser.processWorkbook(args)
 }
