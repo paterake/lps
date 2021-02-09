@@ -9,51 +9,60 @@
   },
   {
     "lineId": 1,
-    "clcnLineElement": ["E", "F", "G", "H"],
+    "clcnLineElement": ["C"],
     "elementSeparator": " ",
     "font": "Helvetica-Bold",
     "fontSize": 10,
-    "textAlignment": "LEFT"
+    "textAlignment": "LEFT",
+    "clcnLineElementRight": ["I"],
+    "elementSeparatorRight": "/",
+    "fontRight": "Helvetica-Bold",
+    "fontSizeRight": 8,
+    "textAlignmentRight": "LEFT",
+    "indexInd": true
   },
   {
     "lineId": 2,
-    "clcnLineElement": ["J", "K", "L", "I", "O"],
-    "clcnParenthesis": ["O"],
+    "clcnLineElement": ["E", "F"],
+    "clcnParenthesis": ["F"],
     "elementSeparator": " ",
-    "font": "Helvetica",
+    "font": "Helvetica-Bold",
     "fontSize": 8,
-    "textAlignment": "LEFT"
+    "textAlignment": "LEFT",
+    "clcnLineElementRight": ["J"],
+    "elementSeparatorRight": "/",
+    "fontRight": "Helvetica-Bold",
+    "fontSizeRight": 8,
+    "textAlignmentRight": "LEFT",
+    "indexInd": true
   },
   {
     "lineId": "3",
-    "clcnLineElement": ["AA", "AC", "AE", "AG", "AI"],
-    "elementSeparator": ",",
+    "clcnLineElement": ["M", "N", "O", "P", "Q"],
+    "elementSeparator": ", ",
     "font": "Helvetica",
     "fontSize": 8,
     "textAlignment": "LEFT"
   },
   {
     "lineId": 4,
-    "clcnLineElement": ["P", "Q", "R", "S", "T", "U"],
+    "clcnLineElement": ["G"],
     "elementSeparator": " ",
     "font": "Helvetica",
-    "fontSize": 8,
-    "textAlignment": "LEFT"
+    "fontSize": 7,
+    "textAlignment": "LEFT",
+    "clcnLineElementRight": ["H"],
+    "elementSeparatorRight": "/",
+    "fontRight": "Helvetica-Bold",
+    "fontSizeRight": 8,
+    "textAlignmentRight": "LEFT"
   },
   {
     "lineId": 5,
-    "clcnLineElement": ["X", "Y", "Z"],
-    "elementSeparator": " ",
-    "font": "Helvetica-Oblique",
+    "clcnLineElement": ["K", "L"],
+    "elementSeparator": ", ",
+    "font": "Helvetica",
     "fontSize": 8,
     "textAlignment": "LEFT"
-  },
-  {
-    "lineId": 6,
-    "clcnLineElement": ["V", "W"],
-    "elementSeparator": "/",
-    "font": "Helvetica-Oblique",
-    "fontSize": 8,
-    "textAlignment": "RIGHT"
   }
 ]

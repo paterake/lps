@@ -1,0 +1,10 @@
+[
+  {
+    "regionName": "default",
+    "blankPageCount": 2
+  },
+  {
+    "regionName": "leicester",
+    "blankPageCount": 5
+  }
+]

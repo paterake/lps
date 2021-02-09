@@ -102,7 +102,7 @@ class AddressParser(cfgName: String, inputFileName: String, outputFileName: Stri
 }
 
 object AddressParser extends App {
-  val cfgName = "cfgAddress_preston"
+  val cfgName = "cfgAddress"
   val sourceFileName = "/home/paterake/Downloads/Master sheet V2.2 All regions - For RCP PDF production 31 Jan 2021.xlsx"
   val targetFileName = "/home/paterake/Downloads/lps_draft"
   val parser = new AddressParser(cfgName, sourceFileName, targetFileName)
