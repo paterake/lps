@@ -1,8 +1,6 @@
 package com.paterake.lps.address.parse
 
-import java.io.File
 import com.paterake.lps.address.cfg.reader.{CfgAddress, CfgRegion}
-import org.apache.poi.ss.usermodel.{Workbook, WorkbookFactory}
 
 class AddressParser(cfgAddressName: String, inputFileName: String, outputFileName: String) {
   import scala.collection.JavaConverters._
@@ -73,19 +71,9 @@ class AddressParser(cfgAddressName: String, inputFileName: String, outputFileNam
     clcnAddressBook
   }
 
-  def openWorkbook(clcnArg: Array[String]): Workbook = {
-    val workbook =
-      if (clcnArg.length == 1) {
-        WorkbookFactory.create(new File(inputFileName), clcnArg(0))
-      } else {
-        WorkbookFactory.create(new File(inputFileName))
-      }
-    workbook
-  }
-
   def processWorkbook(clcnArg: Array[String]): Unit = {
     val pdfBuilder = new PdfBuilder(outputFileName)
-    val workbook = openWorkbook(clcnArg)
+    val workbook = SpreadsheetReader.openWorkbook(inputFileName, clcnArg)
     workbook.sheetIterator().asScala.foreach(f => {
       val region = cfgRegion.getCfg(f.getSheetName)
       pdfBuilder.startNewPage(f.getSheetName, region.blankPageCount)

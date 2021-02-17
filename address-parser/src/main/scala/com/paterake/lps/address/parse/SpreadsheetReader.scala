@@ -1,7 +1,9 @@
 package com.paterake.lps.address.parse
 
-import org.apache.poi.ss.usermodel.{Cell, CellType, Row, Sheet}
+import org.apache.poi.ss.usermodel.{Cell, CellType, Row, Sheet, Workbook, WorkbookFactory}
 import org.apache.poi.ss.util.CellReference
+
+import java.io.File
 
 object SpreadsheetReader {
   import scala.collection.JavaConverters._
@@ -57,6 +59,17 @@ object SpreadsheetReader {
     })
     (clcnHeader, clcnData.toList)
   }
+
+  def openWorkbook(inputFileName: String, clcnArg: Array[String]): Workbook = {
+    val workbook =
+      if (clcnArg.length == 1) {
+        WorkbookFactory.create(new File(inputFileName), clcnArg(0))
+      } else {
+        WorkbookFactory.create(new File(inputFileName))
+      }
+    workbook
+  }
+
 
 
 }

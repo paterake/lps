@@ -12,7 +12,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="scala-sdk-2.11.12" level="application" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.scala-lang:scala-reflect:2.11.12" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.scalatest:scalatest_2.11:3.1.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.scala-lang:scala-library:2.11.12" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.scalatest:scalatest-compatible:3.1.0" level="project" />
