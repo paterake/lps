@@ -23,7 +23,6 @@
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>kernel</artifactId>
-            <version>7.1.13</version>
         </dependency>
         <dependency>
             <groupId>com.itextpdf</groupId>
@@ -45,7 +44,6 @@
             <groupId>com.google.cloud</groupId>
             <artifactId>google-cloud-translate</artifactId>
         </dependency>
-
     </dependencies>
 
 

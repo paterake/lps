@@ -90,6 +90,7 @@
     <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.11" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore:4.4.13" level="project" />
     <orderEntry type="library" name="Maven: com.google.http-client:google-http-client-jackson2:1.38.0" level="project" />
+    <orderEntry type="library" name="Maven: net.imagej:ij:1.53g" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.scalatest:scalatest_2.11:3.1.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.scalatest:scalatest-compatible:3.1.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.scalactic:scalactic_2.11:3.1.0" level="project" />

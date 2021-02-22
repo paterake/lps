@@ -1,5 +1,6 @@
 package com.paterake.lps.address.parse
 
+import com.itextpdf.io.image.ImageDataFactory
 import com.itextpdf.kernel.colors.ColorConstants
 import com.itextpdf.kernel.events.PdfDocumentEvent
 import com.itextpdf.kernel.font.{PdfFont, PdfFontFactory}
@@ -8,7 +9,7 @@ import com.itextpdf.kernel.pdf.canvas.draw.SolidLine
 import com.itextpdf.kernel.pdf.{EncryptionConstants, PdfDocument, PdfReader, PdfWriter, WriterProperties}
 import com.itextpdf.layout.Document
 import com.itextpdf.layout.borders.Border
-import com.itextpdf.layout.element.{AreaBreak, Cell, LineSeparator, Paragraph, Table, Text}
+import com.itextpdf.layout.element.{AreaBreak, Cell, Image, LineSeparator, Paragraph, Table, Text}
 import com.itextpdf.layout.property.{AreaBreakType, TextAlignment}
 import com.paterake.lps.address.cfg.model.ModelCfgAddress
 
@@ -83,7 +84,12 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
 
   def setSubHeader(subHeaderText: Text, alignment: TextAlignment, fontSize: Int): Unit = {
     val paragraph = getParagraph(alignment, fontSize)
-    paragraph.add(subHeaderText)
+
+    val text2Image = new TextToImageParser
+    val image = text2Image.textToGraphic(subHeaderText.getText, fontSize)
+    val imageData = ImageDataFactory.create("/home/paterake/Downloads/text.png")
+    paragraph.add(new Image(imageData))
+
     paragraph.setBackgroundColor(ColorConstants.LIGHT_GRAY)
     paragraph.setFontColor(ColorConstants.WHITE)
     document.add(paragraph)
