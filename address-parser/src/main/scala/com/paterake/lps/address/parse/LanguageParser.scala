@@ -8,7 +8,9 @@ class LanguageParser(sourceFileName: String, sheetName: String) {
   }
 
   def normaliseData(clcnData: List[(Int, Seq[(Int, String)])]): Map[String, String] = {
-    val clcn = clcnData.map(x => (x._2(1)._2.replaceAll("[()]", ""), x._2(2)._2.replaceAll("[()]", "")))
+    val clcn = clcnData
+      //.map(x => (x._2(1)._2.replaceAll("[()]", ""), x._2(2)._2.replaceAll("[()]", "")))
+      .map(x => (x._2(1)._2, x._2(2)._2))
       .filter(p => p._1 != null && p._2 != null && !p._1.equals("") && !p._2.equals(""))
       .foldLeft(Map[String, String]()) { (m, s) => m + s }
     clcn

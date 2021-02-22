@@ -3,6 +3,7 @@ package com.paterake.lps.address.parse
 import com.paterake.lps.address.cfg.reader.{CfgAddress, CfgRegion}
 
 class AddressParser(cfgAddressName: String, inputFileName: String, outputFileName: String) {
+
   import scala.collection.JavaConverters._
 
   private val clcnCfgAddress = new CfgAddress(cfgAddressName).getCfg()
@@ -72,7 +73,8 @@ class AddressParser(cfgAddressName: String, inputFileName: String, outputFileNam
   }
 
   def processWorkbook(clcnArg: Array[String]): Unit = {
-    val pdfBuilder = new PdfBuilder(outputFileName)
+    val clcnTranslation = new LanguageParser().getTranslation(null)
+    val pdfBuilder = new PdfBuilder(outputFileName, clcnTranslation)
     val workbook = SpreadsheetReader.openWorkbook(inputFileName, clcnArg)
     workbook.sheetIterator().asScala.foreach(f => {
       val region = cfgRegion.getCfg(f.getSheetName)

@@ -62,7 +62,7 @@ object SpreadsheetReader {
 
   def openWorkbook(inputFileName: String, clcnArg: Array[String]): Workbook = {
     val workbook =
-      if (clcnArg.length == 1) {
+      if (clcnArg != null && clcnArg.length == 1) {
         WorkbookFactory.create(new File(inputFileName), clcnArg(0))
       } else {
         WorkbookFactory.create(new File(inputFileName))

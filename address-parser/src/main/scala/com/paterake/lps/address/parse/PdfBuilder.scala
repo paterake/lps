@@ -14,7 +14,7 @@ import com.paterake.lps.address.cfg.model.ModelCfgAddress
 
 import java.io.FileOutputStream
 
-class PdfBuilder(outputFileName: String) {
+class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
 
   private val pdfDocument = getPdfDocument()
   private val document = getNewDocument()
@@ -160,10 +160,15 @@ class PdfBuilder(outputFileName: String) {
           val font = clcnFont(line._2)
           val fontSize = clcnFontSize(line._2)
           val alignment = clcnAlignment(line._2)
-          val txt = new Text(line._1._1).setFont(font)
           if (line._2 == 0) {
+            val txt = if ("Overseas Members".equalsIgnoreCase(line._1._1)) {
+              new Text(line._1._1).setFont(font)
+            } else {
+              new Text(line._1._1 + " (" + clcnTranslation(line._1._1) + ")").setFont(font)
+            }
             line0 = addSeperator(txt, line0, line, alignment, fontSize)
           } else {
+            val txt = new Text(line._1._1).setFont(font)
             val element = if (line._1._2 == null) {
               val table = new Table(1).useAllAvailableWidth()
               table.addCell(getCell(txt, TextAlignment.LEFT, fontSize))
