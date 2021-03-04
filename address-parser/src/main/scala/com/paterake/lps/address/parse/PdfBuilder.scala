@@ -1,6 +1,6 @@
 package com.paterake.lps.address.parse
 
-import com.itextpdf.io.image.ImageDataFactory
+import com.itextpdf.io.font.PdfEncodings
 import com.itextpdf.kernel.colors.ColorConstants
 import com.itextpdf.kernel.events.PdfDocumentEvent
 import com.itextpdf.kernel.font.{PdfFont, PdfFontFactory}
@@ -9,18 +9,23 @@ import com.itextpdf.kernel.pdf.canvas.draw.SolidLine
 import com.itextpdf.kernel.pdf.{EncryptionConstants, PdfDocument, PdfReader, PdfWriter, WriterProperties}
 import com.itextpdf.layout.Document
 import com.itextpdf.layout.borders.Border
-import com.itextpdf.layout.element.{AreaBreak, Cell, Image, LineSeparator, Paragraph, Table, Text}
+import com.itextpdf.layout.element.{AreaBreak, Cell, LineSeparator, Paragraph, Table, Text}
 import com.itextpdf.layout.property.{AreaBreakType, TextAlignment}
 import com.paterake.lps.address.cfg.model.ModelCfgAddress
 
 import java.io.FileOutputStream
+import scala.collection.mutable.ListBuffer
 
 class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
 
   private val pdfDocument = getPdfDocument()
   private val document = getNewDocument()
-  private val maxLineCount = 30
+  private val subHeaderParagraphHeight = 23
+  private val maxLineCount = 29
+  private val font_gujarati_location = "/home/paterake/Documents/__cfg/fonts/gujarati//NotoSansGujarati-Regular.ttf"
+  private val font_gujarati = PdfFontFactory.createFont(font_gujarati_location, PdfEncodings.IDENTITY_H)
   private var lineCount = 0
+
 
   def getPdfDocument(): PdfDocument = {
     val pdf = new PdfDocument(new PdfWriter(outputFileName + ".pdf"))
@@ -70,7 +75,7 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
   }
 
   def startNewPage(header: String, blankPageCount: Int): Unit = {
-    for (x <- 0 to blankPageCount){
+    for (x <- 0 to blankPageCount) {
       document.add(new AreaBreak(AreaBreakType.NEXT_PAGE))
     }
     val paragraph = getParagraph(TextAlignment.CENTER, 12)
@@ -82,13 +87,10 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
     incrementLineCount()
   }
 
-  def setSubHeader(subHeaderText: Text, alignment: TextAlignment, fontSize: Int): Unit = {
-    val paragraph = getParagraph(alignment, fontSize)
-
-    val text2Image = new TextToImageParser
-    val image = text2Image.textToGraphic(subHeaderText.getText, fontSize)
-    val imageData = ImageDataFactory.create("/home/paterake/Downloads/text.png")
-    paragraph.add(new Image(imageData))
+  def setSubHeader(clcnTxt: List[Text], alignment: TextAlignment, fontSize: Int): Unit = {
+    val paragraph = getParagraph(alignment, 0)
+    paragraph.setHeight(subHeaderParagraphHeight)
+    clcnTxt.foreach(x => paragraph.add(x))
 
     paragraph.setBackgroundColor(ColorConstants.LIGHT_GRAY)
     paragraph.setFontColor(ColorConstants.WHITE)
@@ -107,10 +109,10 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
     incrementLineCount()
   }
 
-  def addSeperator(txt: Text, line0: String, line: ((String, String), Int), alignment: TextAlignment, fontSize: Int): String = {
+  def addSeparator(clcnTxt: List[Text], line0: String, line: ((String, String), Int), alignment: TextAlignment, fontSize: Int): String = {
     if (!line0.equals(line._1._1) || (lineCount == 1)) {
       val line0Return = line._1._1
-      setSubHeader(txt, alignment, fontSize)
+      setSubHeader(clcnTxt, alignment, fontSize)
       line0Return
     } else {
       setSubHeaderAsLine()
@@ -167,12 +169,17 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
           val fontSize = clcnFontSize(line._2)
           val alignment = clcnAlignment(line._2)
           if (line._2 == 0) {
-            val txt = if ("Overseas Members".equalsIgnoreCase(line._1._1)) {
-              new Text(line._1._1).setFont(font)
+            val clcnTxt = if ("Overseas Members".equalsIgnoreCase(line._1._1)) {
+              ListBuffer(
+                new Text(line._1._1).setFont(font).setFontSize(fontSize)
+              )
             } else {
-              new Text(line._1._1 + " (" + clcnTranslation(line._1._1) + ")").setFont(font)
+              ListBuffer(
+                new Text(line._1._1).setFont(font).setFontSize(fontSize),
+                new Text(" (" + clcnTranslation(line._1._1) + ")").setFont(font_gujarati).setFontSize(fontSize)
+              )
             }
-            line0 = addSeperator(txt, line0, line, alignment, fontSize)
+            line0 = addSeparator(clcnTxt.toList, line0, line, alignment, fontSize)
           } else {
             val txt = new Text(line._1._1).setFont(font)
             val element = if (line._1._2 == null) {

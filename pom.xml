@@ -24,7 +24,7 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.shade.version>3.2.1</maven.shade.version>
         <slf4j.version>1.7.16</slf4j.version>
-        <apache.poi.version>4.1.2</apache.poi.version>
+        <apache.poi.version>5.0.0</apache.poi.version>
         <itext.version>7.1.14</itext.version>
         <jackson.version>2.6.7</jackson.version>
         <google-api-version>1.95.4</google-api-version>
@@ -72,7 +72,6 @@
                 <artifactId>layout</artifactId>
                 <version>${itext.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-core</artifactId>
