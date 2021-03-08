@@ -11,7 +11,7 @@ import com.itextpdf.layout.Document
 import com.itextpdf.layout.borders.Border
 import com.itextpdf.layout.element.{AreaBreak, Cell, LineSeparator, Paragraph, Table, Text}
 import com.itextpdf.layout.property.{AreaBreakType, TextAlignment}
-import com.paterake.lps.address.cfg.model.ModelCfgAddress
+import com.paterake.lps.address.cfg.model.{ModelCfgAddress, ModelCfgIndex}
 
 import java.io.FileOutputStream
 import scala.collection.mutable.ListBuffer
@@ -26,6 +26,7 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
   private val font_gujarati = PdfFontFactory.createFont(font_gujarati_location, PdfEncodings.IDENTITY_H)
   private var lineCount = 0
   private val clcnNameSuffix = scala.io.Source.fromInputStream(getClass.getResourceAsStream("/nameSuffix.txt")).getLines.toList
+  private val clcnNameIdx = new ListBuffer[ModelCfgIndex]()
 
 
   def getPdfDocument(): PdfDocument = {
@@ -198,23 +199,28 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
     newName
   }
 
-  def getIndexEntry(entryLineNumber: Int, entry: List[(String, String)], header: String): (String, String, String, String, String, Int) = {
-    val (mainName, spouseName, nameRegion, nameVillage, nameSpouseVillage, namePage) = {
+  def getIndexEntry(entryLineNumber: Int, entry: List[(String, String)], header: String): ModelCfgIndex = {
+    val indexEntry = {
       if (entryLineNumber.equals(1)) {
         val mainName = entry(1)._1.split(" ").filterNot(p => p.equals("(Late)")).filterNot(p => p.equals("Patel")).mkString(" ")
         val spouseName = entry(2)._1.split(" ").filterNot(p => p.equals("(Late)")).filterNot(p => p.equals("Patel")).head
         val village = entry(0)._1
         val spouseVillage = null
-        (stripSuffix(mainName), stripSuffix(spouseName), village, spouseVillage, header, pdfDocument.getNumberOfPages)
+        ModelCfgIndex(stripSuffix(mainName), stripSuffix(spouseName), village, spouseVillage, header, pdfDocument.getNumberOfPages)
       } else {
         val mainName = entry(2)._1.split(" ").filterNot(p => p.equals("(Late)")).filterNot(p => p.equals("Patel")).mkString(" ")
         val spouseName = entry(1)._1.split(" ").filterNot(p => p.equals("(Late)")).filterNot(p => p.equals("Patel")).head
         val village = entry(0)._1
-        val spouseVillage = entry(2)._1.split(" ").reverse.head
-        (stripSuffix(mainName.replace(spouseVillage, "").trim), stripSuffix(spouseName), village, spouseVillage, header, pdfDocument.getNumberOfPages)
+        val spouseVillage =
+          if (entry(2)._1.split(" ").reverse.head.startsWith("(") && entry(2)._1.split(" ").reverse.head.endsWith(")")) {
+            entry(2)._1.split(" ").reverse.head
+          } else {
+            ""
+          }
+        ModelCfgIndex(stripSuffix(mainName.replace(spouseVillage, "").trim), stripSuffix(spouseName), village, spouseVillage, header, pdfDocument.getNumberOfPages)
       }
     }
-    (mainName, spouseName, nameRegion, nameVillage, nameSpouseVillage, namePage)
+    indexEntry
   }
 
   def convertToPdf(header: String, clcnCfgAddress: List[ModelCfgAddress], clcnAddressBook: List[List[(String, String)]]): Unit = {
@@ -243,8 +249,7 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
             }
           }
           if (clcnCfgAddress(line._2).indexInd) {
-            val indexEntry = getIndexEntry(line._2, entry, header)
-            println(indexEntry)
+            clcnNameIdx.append(getIndexEntry(line._2, entry, header))
           }
           if (line._2 == 1) {
             //println("Position: " + line._1._1 + ":" + line._1._2 + ":" + lineCount)
@@ -252,6 +257,10 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
         }
       })
     })
+  }
+
+  def addNameIndex(): Unit = {
+    clcnNameIdx.sortBy(index => index.mainName).foreach(x => println(x))
   }
 
 
