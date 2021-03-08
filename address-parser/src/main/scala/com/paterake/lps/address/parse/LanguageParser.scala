@@ -4,7 +4,7 @@ class LanguageParser(sourceFileName: String, sheetName: String) {
   import scala.collection.JavaConverters._
 
   def this() {
-    this("/home/paterake/Downloads/Master list Guju-Name-Gaam- 8 Feb 2021.xlsx", "Corrected 08-02-21")
+    this("/home/paterake/Downloads/Master list Guju-Name-Gaam- 8 Feb 2021.xlsx", "Corrected 23-02-21")
   }
 
   def normaliseData(clcnData: List[(Int, Seq[(Int, String)])]): Map[String, String] = {
@@ -36,5 +36,6 @@ class LanguageParser(sourceFileName: String, sheetName: String) {
 
 object LanguageParser extends App {
   val parser = new LanguageParser()
-  parser.getTranslation(args)
+  val clcnTranslation = parser.getTranslation(args)
+  clcnTranslation.foreach(x => println(x))
 }

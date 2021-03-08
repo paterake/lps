@@ -1,6 +1,7 @@
 [
   {
     "lineId": 0,
+    "lineComment": "Village subheader format",
     "clcnLineElement": ["A"],
     "elementSeparator": " ",
     "font": "Helvetica-Bold",
@@ -9,6 +10,7 @@
   },
   {
     "lineId": 1,
+    "lineComment": "Main member and mobile number",
     "clcnLineElement": ["C"],
     "elementSeparator": " ",
     "font": "Helvetica-Bold",
@@ -23,6 +25,7 @@
   },
   {
     "lineId": 2,
+    "lineComment": "Partner member and mobile number",
     "clcnLineElement": ["E", "F"],
     "clcnParenthesis": ["F"],
     "elementSeparator": " ",
@@ -38,6 +41,7 @@
   },
   {
     "lineId": "3",
+    "lineComment": "Children",
     "clcnLineElement": ["M", "N", "O", "P", "Q"],
     "elementSeparator": ", ",
     "font": "Helvetica",
@@ -46,6 +50,7 @@
   },
   {
     "lineId": 4,
+    "lineComment": "House address and telephone number",
     "clcnLineElement": ["G"],
     "elementSeparator": " ",
     "font": "Helvetica",
@@ -59,8 +64,10 @@
   },
   {
     "lineId": 5,
+    "lineComment": "Email addresses",
     "clcnLineElement": ["K", "L"],
     "elementSeparator": ", ",
+    "fontCase": "lower",
     "font": "Helvetica",
     "fontSize": 8,
     "textAlignment": "LEFT"

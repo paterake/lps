@@ -174,9 +174,14 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
                 new Text(line._1._1).setFont(font).setFontSize(fontSize)
               )
             } else {
+              val translation = try {
+                "(" + clcnTranslation(line._1._1) + ")"
+              } catch {
+                case _: Exception => clcnTranslation("(" + line._1._1 + ")")
+              }
               ListBuffer(
                 new Text(line._1._1).setFont(font).setFontSize(fontSize),
-                new Text(" (" + clcnTranslation(line._1._1) + ")").setFont(font_gujarati).setFontSize(fontSize)
+                new Text(" " + translation).setFont(font_gujarati).setFontSize(fontSize)
               )
             }
             line0 = addSeparator(clcnTxt.toList, line0, line, alignment, fontSize)
