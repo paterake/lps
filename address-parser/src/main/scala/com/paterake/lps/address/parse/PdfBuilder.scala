@@ -25,6 +25,7 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
   private val font_gujarati_location = "/home/paterake/Documents/__cfg/fonts/gujarati//NotoSansGujarati-Regular.ttf"
   private val font_gujarati = PdfFontFactory.createFont(font_gujarati_location, PdfEncodings.IDENTITY_H)
   private var lineCount = 0
+  private val clcnNameSuffix = scala.io.Source.fromInputStream(getClass.getResourceAsStream("/nameSuffix.txt")).getLines.toList
 
 
   def getPdfDocument(): PdfDocument = {
@@ -91,10 +92,10 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
     val paragraph = getParagraph(alignment, 0)
     paragraph.setHeight(subHeaderParagraphHeight)
     clcnTxt.foreach(x => paragraph.add(x))
-
     paragraph.setBackgroundColor(ColorConstants.LIGHT_GRAY)
     paragraph.setFontColor(ColorConstants.WHITE)
     document.add(paragraph)
+    incrementLineCount()
     incrementLineCount()
   }
 
@@ -106,7 +107,7 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
     val lineSeparator = new LineSeparator(line)
     document.add(lineSeparator)
     document.add(paragraph)
-    incrementLineCount()
+    //incrementLineCount()
   }
 
   def addSeparator(clcnTxt: List[Text], line0: String, line: ((String, String), Int), alignment: TextAlignment, fontSize: Int): String = {
@@ -155,7 +156,69 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
     cell
   }
 
+  def getSeparatorText(textToTranslate: String, font: PdfFont, fontSize: Int): List[Text] = {
+    val clcnTxt = if ("Overseas Members".equalsIgnoreCase(textToTranslate)) {
+      ListBuffer(
+        new Text(textToTranslate).setFont(font).setFontSize(fontSize)
+      )
+    } else {
+      val translation = try {
+        "(" + clcnTranslation(textToTranslate) + ")"
+      } catch {
+        case _: Exception => clcnTranslation("(" + textToTranslate + ")")
+      }
+      ListBuffer(
+        new Text(textToTranslate).setFont(font).setFontSize(fontSize),
+        new Text(" " + translation).setFont(font_gujarati).setFontSize(fontSize)
+      )
+    }
+    clcnTxt.toList
+  }
+
+  def setDocument(txt: Text, alignment: TextAlignment, fontSize: Int): Table = {
+    val table = new Table(1).useAllAvailableWidth()
+    table.addCell(getCell(txt, TextAlignment.LEFT, fontSize))
+    document.add(table)
+    incrementLineCount()
+    table
+  }
+
+  def setDocument(txt: Text, alignment: TextAlignment, fontSize: Int, rightString: String, fontRight: PdfFont, fontSizeRight: Int, alignmentRight: TextAlignment): Table = {
+    val txtRight = new Text(rightString).setFont(fontRight)
+    val table = new Table(2).useAllAvailableWidth()
+    table.addCell(getCell(txt, TextAlignment.LEFT, fontSize))
+    table.addCell(getCell(txtRight, TextAlignment.RIGHT, fontSizeRight))
+    document.add(table)
+    incrementLineCount()
+    table
+  }
+
+  def stripSuffix(name: String): String = {
+    val newName = clcnNameSuffix.foldLeft(name)((a, b) => a.replaceAll(b, ""))
+    newName
+  }
+
+  def getIndexEntry(entryLineNumber: Int, entry: List[(String, String)], header: String): (String, String, String, String, String, Int) = {
+    val (mainName, spouseName, nameRegion, nameVillage, nameSpouseVillage, namePage) = {
+      if (entryLineNumber.equals(1)) {
+        val mainName = entry(1)._1.split(" ").filterNot(p => p.equals("(Late)")).filterNot(p => p.equals("Patel")).mkString(" ")
+        val spouseName = entry(2)._1.split(" ").filterNot(p => p.equals("(Late)")).filterNot(p => p.equals("Patel")).head
+        val village = entry(0)._1
+        val spouseVillage = null
+        (stripSuffix(mainName), stripSuffix(spouseName), village, spouseVillage, header, pdfDocument.getNumberOfPages)
+      } else {
+        val mainName = entry(2)._1.split(" ").filterNot(p => p.equals("(Late)")).filterNot(p => p.equals("Patel")).mkString(" ")
+        val spouseName = entry(1)._1.split(" ").filterNot(p => p.equals("(Late)")).filterNot(p => p.equals("Patel")).head
+        val village = entry(0)._1
+        val spouseVillage = entry(2)._1.split(" ").reverse.head
+        (stripSuffix(mainName.replace(spouseVillage, "").trim), stripSuffix(spouseName), village, spouseVillage, header, pdfDocument.getNumberOfPages)
+      }
+    }
+    (mainName, spouseName, nameRegion, nameVillage, nameSpouseVillage, namePage)
+  }
+
   def convertToPdf(header: String, clcnCfgAddress: List[ModelCfgAddress], clcnAddressBook: List[List[(String, String)]]): Unit = {
+
     val (clcnFont, clcnFontSize, clcnAlignment, clcnFontRight, clcnFontSizeRight, clcnAlignmentRight) = getParagraghFormat(clcnCfgAddress)
 
     var line0 = ""
@@ -169,48 +232,22 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
           val fontSize = clcnFontSize(line._2)
           val alignment = clcnAlignment(line._2)
           if (line._2 == 0) {
-            val clcnTxt = if ("Overseas Members".equalsIgnoreCase(line._1._1)) {
-              ListBuffer(
-                new Text(line._1._1).setFont(font).setFontSize(fontSize)
-              )
-            } else {
-              val translation = try {
-                "(" + clcnTranslation(line._1._1) + ")"
-              } catch {
-                case _: Exception => clcnTranslation("(" + line._1._1 + ")")
-              }
-              ListBuffer(
-                new Text(line._1._1).setFont(font).setFontSize(fontSize),
-                new Text(" " + translation).setFont(font_gujarati).setFontSize(fontSize)
-              )
-            }
-            line0 = addSeparator(clcnTxt.toList, line0, line, alignment, fontSize)
+            val clcnTxt = getSeparatorText(line._1._1, font, fontSize)
+            line0 = addSeparator(clcnTxt, line0, line, alignment, fontSize)
           } else {
             val txt = new Text(line._1._1).setFont(font)
             val element = if (line._1._2 == null) {
-              val table = new Table(1).useAllAvailableWidth()
-              table.addCell(getCell(txt, TextAlignment.LEFT, fontSize))
-              document.add(table)
-              incrementLineCount()
-              table
+              setDocument(txt, TextAlignment.LEFT, fontSize)
             } else {
-              val fontRight = clcnFontRight(line._2)
-              val fontSizeRight = clcnFontSizeRight(line._2)
-              val alignmentRight = clcnAlignmentRight(line._2)
-              val txtRight = new Text(line._1._2).setFont(fontRight)
-              val table = new Table(2).useAllAvailableWidth()
-              table.addCell(getCell(txt, TextAlignment.LEFT, fontSize))
-              table.addCell(getCell(txtRight, TextAlignment.RIGHT, fontSizeRight))
-              document.add(table)
-              incrementLineCount()
-              if (clcnCfgAddress(line._2).indexInd) {
-                //println(entry(0)._1 + ":" + line._1._1 + ":" + pdfDocument.getNumberOfPages)
-              }
-              table
+              setDocument(txt, TextAlignment.LEFT, fontSize, line._1._2, clcnFontRight(line._2), clcnFontSizeRight(line._2), clcnAlignmentRight(line._2))
             }
           }
+          if (clcnCfgAddress(line._2).indexInd) {
+            val indexEntry = getIndexEntry(line._2, entry, header)
+            println(indexEntry)
+          }
           if (line._2 == 1) {
-            println("Position: " + line._1._1 + ":" + line._1._2 + ":" + lineCount)
+            //println("Position: " + line._1._1 + ":" + line._1._2 + ":" + lineCount)
           }
         }
       })

@@ -46,7 +46,8 @@
     "elementSeparator": ", ",
     "font": "Helvetica",
     "fontSize": 8,
-    "textAlignment": "LEFT"
+    "textAlignment": "LEFT",
+    "dropSurname": true
   },
   {
     "lineId": 4,
