@@ -22,7 +22,10 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
   private val document = getNewDocument()
   private val subHeaderParagraphHeight = 23
   private val maxLineCount = 29
-  private val font_gujarati_location = "/home/paterake/Documents/__cfg/fonts/gujarati//NotoSansGujarati-Regular.ttf"
+  //private val font_gujarati_location = "/home/paterake/Documents/__cfg/fonts/noto_gujarati/NotoSansGujarati-Regular.ttf"
+  //private val font_gujarati_location = "/home/paterake/Documents/__cfg/fonts/lohit-gujarati.ttf"
+  private val font_gujarati_location = "/home/paterake/Documents/__cfg/fonts/Ekatrafonts/Ekatra-N_240114.ttf"
+
   private val font_gujarati = PdfFontFactory.createFont(font_gujarati_location, PdfEncodings.IDENTITY_H)
   private var lineCount = 0
   private val clcnNameSuffix = scala.io.Source.fromInputStream(getClass.getResourceAsStream("/nameSuffix.txt")).getLines.toList
@@ -259,8 +262,65 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
     })
   }
 
+  def getIndexName(mainName: String, spouseName: String): (String, String) = {
+    val indexName = if (spouseName == null || spouseName.length < 1) {
+      mainName
+    } else {
+      mainName + " (" + spouseName + ")"
+    }
+    val translation = mainName.split(" ").map(part => {
+      try {
+        if (part.startsWith("(")|| part.endsWith(")")) {
+          val partTranslation = clcnTranslation(part.replace("(", "").replace(")", ""))
+          val newPart = StringBuilder.newBuilder
+          if (part.startsWith("(")) {
+            newPart.append("(")
+          }
+          newPart.append(partTranslation)
+          if (part.endsWith("(")) {
+            newPart.append(")")
+          }
+        } else {
+          clcnTranslation(part)
+        }
+      } catch {
+        case _: Exception => ""
+      }
+    }).mkString(" ")
+    (indexName, translation)
+  }
+
+  def getIndexVillageName(mainVillageName: String, spouseVillageName: String): String = {
+    val villageName =
+      if (spouseVillageName == null || spouseVillageName.length < 1) {
+        mainVillageName
+      } else {
+        mainVillageName + " (" + spouseVillageName + ")"
+      }
+    villageName
+  }
+
   def addNameIndex(): Unit = {
-    clcnNameIdx.sortBy(index => index.mainName).foreach(x => println(x))
+    val table = new Table(5).useAllAvailableWidth()
+    val font = PdfFontFactory.createFont("Helvetica")
+    val fontSize = 5
+
+    clcnNameIdx.sortBy(index => index.mainName).foreach(x => {
+      println(x)
+      val indexName = getIndexName(x.mainName, x.spouseName)
+      val villageName = getIndexVillageName(x.mainVillageName, x.spouseVillageName)
+      val txtMainName = new Text(indexName._1).setFont(font)
+      val txtTranslation = new Text(indexName._2).setFont(font_gujarati)
+      val txtVillage = new Text(x.mainVillageName).setFont(font)
+      val txtRegion = new Text(x.region).setFont(font)
+      val txtPageNumber = new Text(x.pageNumber.toString).setFont(font)
+      table.addCell(getCell(txtMainName, TextAlignment.LEFT, fontSize))
+      table.addCell(getCell(txtTranslation, TextAlignment.LEFT, fontSize))
+      table.addCell(getCell(txtVillage, TextAlignment.LEFT, fontSize))
+      table.addCell(getCell(txtRegion, TextAlignment.LEFT, fontSize))
+      table.addCell(getCell(txtPageNumber, TextAlignment.LEFT, fontSize))
+    })
+    document.add(table)
   }
 
 
