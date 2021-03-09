@@ -102,6 +102,7 @@ class AddressParser(cfgAddressName: String, inputFileName: String, outputFileNam
       //println(clcnAddressBook)
       pdfBuilder.convertToPdf(f.getSheetName, clcnCfgAddress, clcnAddressBook)
     })
+    pdfBuilder.startNewPage("Index", 0)
     pdfBuilder.addNameIndex()
     if (clcnArg.length == 1) {
       pdfBuilder.closeDocument(clcnArg(0))

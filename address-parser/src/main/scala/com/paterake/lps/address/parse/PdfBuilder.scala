@@ -23,8 +23,8 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
   private val subHeaderParagraphHeight = 23
   private val maxLineCount = 29
   //private val font_gujarati_location = "/home/paterake/Documents/__cfg/fonts/noto_gujarati/NotoSansGujarati-Regular.ttf"
-  //private val font_gujarati_location = "/home/paterake/Documents/__cfg/fonts/lohit-gujarati.ttf"
-  private val font_gujarati_location = "/home/paterake/Documents/__cfg/fonts/Ekatrafonts/Ekatra-N_240114.ttf"
+  private val font_gujarati_location = "/home/paterake/Documents/__cfg/fonts/lohit-gujarati.ttf"
+  //private val font_gujarati_location = "/home/paterake/Documents/__cfg/fonts/Ekatrafonts/Ekatra-N_240114.ttf"
 
   private val font_gujarati = PdfFontFactory.createFont(font_gujarati_location, PdfEncodings.IDENTITY_H)
   private var lineCount = 0
