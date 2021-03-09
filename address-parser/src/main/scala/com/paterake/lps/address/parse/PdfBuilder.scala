@@ -268,25 +268,26 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
     } else {
       mainName + " (" + spouseName + ")"
     }
-    val translation = mainName.split(" ").map(part => {
-      try {
-        if (part.startsWith("(")|| part.endsWith(")")) {
+    val translation = try {
+      mainName.replaceAll("\\(.*?\\)","").split(" ").map(part => {
+        if (part.startsWith("(") || part.endsWith(")")) {
           val partTranslation = clcnTranslation(part.replace("(", "").replace(")", ""))
           val newPart = StringBuilder.newBuilder
           if (part.startsWith("(")) {
             newPart.append("(")
           }
           newPart.append(partTranslation)
-          if (part.endsWith("(")) {
+          if (part.endsWith(")")) {
             newPart.append(")")
           }
+          newPart.mkString
         } else {
           clcnTranslation(part)
         }
-      } catch {
-        case _: Exception => ""
-      }
-    }).mkString(" ")
+      }).mkString(" ")
+    } catch {
+      case _: Exception => ""
+    }
     (indexName, translation)
   }
 
@@ -311,7 +312,7 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
       val villageName = getIndexVillageName(x.mainVillageName, x.spouseVillageName)
       val txtMainName = new Text(indexName._1).setFont(font)
       val txtTranslation = new Text(indexName._2).setFont(font_gujarati)
-      val txtVillage = new Text(x.mainVillageName).setFont(font)
+      val txtVillage = new Text(villageName).setFont(font)
       val txtRegion = new Text(x.region).setFont(font)
       val txtPageNumber = new Text(x.pageNumber.toString).setFont(font)
       table.addCell(getCell(txtMainName, TextAlignment.LEFT, fontSize))
