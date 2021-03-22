@@ -1,6 +1,5 @@
 package com.paterake.lps.address.parse
 
-import com.itextpdf.io.font.PdfEncodings
 import com.itextpdf.kernel.colors.ColorConstants
 import com.itextpdf.kernel.events.PdfDocumentEvent
 import com.itextpdf.kernel.font.{PdfFont, PdfFontFactory}
@@ -20,13 +19,12 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
 
   private val pdfDocument = getPdfDocument()
   private val document = getNewDocument()
-  private val subHeaderParagraphHeight = 23
+  private val subHeaderParagraphHeight = 40
   private val maxLineCount = 29
-  //private val font_gujarati_location = "/home/paterake/Documents/__cfg/fonts/noto_gujarati/NotoSansGujarati-Regular.ttf"
-  private val font_gujarati_location = "/home/paterake/Documents/__cfg/fonts/lohit-gujarati.ttf"
-  //private val font_gujarati_location = "/home/paterake/Documents/__cfg/fonts/Ekatrafonts/Ekatra-N_240114.ttf"
 
-  private val font_gujarati = PdfFontFactory.createFont(font_gujarati_location, PdfEncodings.IDENTITY_H)
+  private val font_gujarati = FontBuilder.getFont()
+
+
   private var lineCount = 0
   private val clcnNameSuffix = scala.io.Source.fromInputStream(getClass.getResourceAsStream("/nameSuffix.txt")).getLines.toList
   private val clcnNameIdx = new ListBuffer[ModelCfgIndex]()

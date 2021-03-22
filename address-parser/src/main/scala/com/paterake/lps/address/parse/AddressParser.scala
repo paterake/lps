@@ -115,7 +115,7 @@ class AddressParser(cfgAddressName: String, inputFileName: String, outputFileNam
 
 object AddressParser extends App {
   val cfgAddressName = "cfgAddress"
-  val sourceFileName = "/home/paterake/Downloads/Master sheet V3 All regions Updated - For PDF production.xlsx"
+  val sourceFileName = "/home/paterake/Downloads/Master sheet V3.1 All regions Updated - For PDF production.xlsx"
   val targetFileName = "/home/paterake/Downloads/lps_draft"
   val parser = new AddressParser(cfgAddressName, sourceFileName, targetFileName)
   parser.processWorkbook(args)
