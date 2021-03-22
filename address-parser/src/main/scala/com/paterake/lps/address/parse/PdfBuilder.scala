@@ -19,7 +19,7 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
 
   private val pdfDocument = getPdfDocument()
   private val document = getNewDocument()
-  private val subHeaderParagraphHeight = 40
+  private val subHeaderParagraphHeight = 23
   private val maxLineCount = 29
 
   private val font_gujarati = FontBuilder.getFont()
