@@ -81,11 +81,16 @@ class AddressParser(cfgAddressName: String, inputFileName: String, outputFileNam
     val clcnAddressBook = clcnData.map(line => {
       extractAddressLine(line)
     }).filter(p => p(0)._1 != null && p(0)._1 != "").sortBy(x => {
-      if (x(0)._1.toLowerCase.startsWith("social") || x(0)._1.toLowerCase.startsWith("overseas")) {
-        "zzz" + x(0)._1 + x(1)._1
-      } else {
-        (x(0)._1 + x(1)._1).replaceAll(" ", "z")
+      val sortKey1 = x(0)._1.replaceAll("[^A-Za-z0-9]", "")
+      val sortKey2 = x(1)._1.replaceAll("[^A-Za-z0-9]", "")
+      val sortPrefix = {
+        if (x(0)._1.toLowerCase.startsWith("social") || x(0)._1.toLowerCase.startsWith("overseas")) {
+          "zzz"
+        } else {
+          ""
+        }
       }
+      (sortPrefix + sortKey1, sortKey2)
     })
     clcnAddressBook
   }
