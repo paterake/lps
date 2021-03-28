@@ -84,7 +84,7 @@ class AddressParser(cfgAddressName: String, inputFileName: String, outputFileNam
       if (x(0)._1.toLowerCase.startsWith("social") || x(0)._1.toLowerCase.startsWith("overseas")) {
         "zzz" + x(0)._1 + x(1)._1
       } else {
-        x(0)._1 + x(1)._1
+        (x(0)._1 + x(1)._1).replaceAll(" ", "z")
       }
     })
     clcnAddressBook
