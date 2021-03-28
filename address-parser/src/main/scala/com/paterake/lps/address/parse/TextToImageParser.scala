@@ -36,7 +36,7 @@ class TextToImageParser {
     g2d.drawString(text, 0, fm.getAscent());
     g2d.dispose()
     try {
-      ImageIO.write(img, "png", new File("/home/paterake/Downloads/text.png"));
+      ImageIO.write(img, "png", new File(Location.tmpImageLocation));
     } catch {
       case e: Exception => {
         e.printStackTrace()

@@ -6,12 +6,14 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="translation-service" />
         <module name="address-parser" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="address-parser" target="1.8" />
       <module name="lps" target="1.8" />
+      <module name="translation-service" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -5,12 +5,8 @@ import com.itextpdf.kernel.font.{PdfFont, PdfFontFactory}
 
 object FontBuilder {
 
-
   def getFont(): PdfFont = {
-    val font_gujarati_location = "/home/paterake/Documents/__cfg/fonts/noto_gujarati/NotoSansGujarati-Regular.ttf"
-    ///private val font_gujarati_location = "/home/paterake/Documents/__cfg/fonts/lohit-gujarati.ttf"
-    //private val font_gujarati_location = "/home/paterake/Documents/__cfg/fonts/Ekatrafonts/Ekatra-N_240114.ttf"
-    //val font_gujarati_location = "/home/paterake/Documents/__cfg/fonts/GujaratiSangamMN.ttf"
+    val font_gujarati_location = Location.font_gujarati_location
 
     val font_gujarati = PdfFontFactory.createFont(font_gujarati_location, PdfEncodings.IDENTITY_H)
     font_gujarati
@@ -27,8 +23,7 @@ object FontBuilder {
   }
 
   def getFontCollctionFont(): PdfFont = {
-    val ttcLocation = "/home/paterake/Documents/__cfg/fonts/Collected_Fonts/Gujarati_Sangam_MN/Gujarati_Sangam_MN.ttc"
-    val ttcLocation2 = "/home/paterake/Documents/__cfg/fonts/Collected_Fonts/Gujarati_MT/GujaratiMT.ttc"
+    val ttcLocation = Location.font_collection_location
     val ttc = new TrueTypeCollection(ttcLocation)
     //listFontCollection(ttc)
     val fontProgram = ttc.getFontByTccIndex(0)

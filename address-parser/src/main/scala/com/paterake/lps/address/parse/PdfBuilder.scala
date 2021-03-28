@@ -26,7 +26,7 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
 
 
   private var lineCount = 0
-  private val clcnNameSuffix = scala.io.Source.fromInputStream(getClass.getResourceAsStream("/nameSuffix.txt")).getLines.toList
+  private val clcnNameSuffix = scala.io.Source.fromInputStream(getClass.getResourceAsStream(Location.nameSuffix)).getLines.toList
   private val clcnNameIdx = new ListBuffer[ModelCfgIndex]()
 
 

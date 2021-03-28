@@ -2,7 +2,6 @@ package com.paterake.lps.address.translate
 
 import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Paths, StandardOpenOption}
-
 import scala.collection.mutable
 import scala.io.Source
 

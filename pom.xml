@@ -10,6 +10,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>address-parser</module>
+        <module>translation-service</module>
     </modules>
 
     <properties>

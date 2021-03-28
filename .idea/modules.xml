@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/address-parser/address-parser.iml" filepath="$PROJECT_DIR$/address-parser/address-parser.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/lps.iml" filepath="$PROJECT_DIR$/.idea/lps.iml" />
+      <module fileurl="file://$PROJECT_DIR$/translation-service/translation-service.iml" filepath="$PROJECT_DIR$/translation-service/translation-service.iml" />
     </modules>
   </component>
 </project>
