@@ -10,13 +10,14 @@ import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.property.UnitValue;
+import com.paterake.lps.address.parse.Location;
 
 import java.io.File;
 
 public class GujaratiExample {
     public static final String DEST = "/home/paterake/Downloads/gujarati_example.pdf";
 
-    public static final String FONT = "/home/paterake/Documents/__cfg/fonts/gujarati//NotoSansGujarati-Regular.ttf";
+    public static final String FONT = Location.font_gujarati_location();
 
     public static void main(String[] args) throws Exception {
         File file = new File(DEST);
@@ -32,9 +33,11 @@ public class GujaratiExample {
 
         Text t1 = new Text("Rakesh");
         Text t2 = new Text("Patel");
+        Text t3 = new Text("Asta");
 
         Text gt1 = new Text(" (રાકેશ)").setFont(f);
         Text gt2 = new Text(" (પટેલ)").setFont(f);
+        Text gt3 = new Text(" (આસ્તા)").setFont(f);
 
         Paragraph p1 = new Paragraph();
         p1.add(t1);
@@ -45,6 +48,11 @@ public class GujaratiExample {
         p2.add(t2);
         p2.add(gt2);
         doc.add(p2);
+
+        Paragraph p3 = new Paragraph();
+        p3.add(t3);
+        p3.add(gt3);
+        doc.add(p3);
 
         Table table = new Table(UnitValue.createPercentArray(new float[] {10, 60, 30})).useAllAvailableWidth();
         Cell customerLblCell = new Cell().add(new Paragraph("CUSTOMERS"));

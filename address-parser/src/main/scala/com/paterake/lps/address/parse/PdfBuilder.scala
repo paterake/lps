@@ -197,6 +197,7 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
 
   def stripSuffix(name: String): String = {
     val newName = clcnNameSuffix.foldLeft(name)((a, b) => a.replaceAll(b, ""))
+    //val newName = name.split(" ").map(x => clcnNameSuffix.foldLeft(x)((a, b) => a.stripSuffix(b))).mkString(" ")
     newName
   }
 

@@ -26,37 +26,37 @@ class AddressParser(cfgAddressName: String, inputFileName: String, outputFileNam
     })
   }
 
+  def getFormattedEntry(clcnParenthesis: List[String], fontCase: String, dropSurname: Boolean, surname: String, columnName: String, entry: (Int, String)): String = {
+    var formattedEntry = entry._2
+    if (formattedEntry.startsWith("(") && formattedEntry.endsWith(")")) {
+      formattedEntry = formattedEntry.stripPrefix("(").stripSuffix(")")
+    }
+    if (dropSurname) {
+      formattedEntry = formattedEntry.replace(" " + surname, "")
+    }
+    if (fontCase != null) {
+      if (fontCase.equals("lower")) {
+        formattedEntry = formattedEntry.toLowerCase
+      } else if (fontCase.equals("initcap")) {
+        formattedEntry = formattedEntry.toLowerCase.split(' ').map(_.capitalize).mkString(" ")
+        if (formattedEntry.contains("(")) {
+          formattedEntry = formattedEntry.split('(').map(_.capitalize).mkString("(")
+        }
+      }
+    }
+    if (clcnParenthesis != null && clcnParenthesis.contains(columnName) && entry._2.nonEmpty) {
+      formattedEntry = "(" + formattedEntry + ")"
+    }
+    formattedEntry
+  }
+
   def getEntry(addressLine: (Int, Seq[(Int, String)]), clcnLineElement: List[String], clcnParenthesis: List[String], elementSeparator: String, fontCase: String, dropSurname: Boolean, surname: String): String = {
     if (clcnLineElement == null || clcnLineElement.isEmpty) {
       null
     } else {
       val clcnEntry = clcnLineElement.map(columnName => {
         addressLine._2.filter(p => SpreadsheetReader.getColumnIndex(columnName) == p._1).map(x => {
-          if (clcnParenthesis != null && clcnParenthesis.contains(columnName) && x._2.nonEmpty) {
-            if (x._2.startsWith("(") && x._2.endsWith(")")) {
-              if (fontCase != null && fontCase.equals("lower")) {
-                x._2.toLowerCase
-              } else {
-                x._2
-              }
-            } else {
-              if (fontCase != null && fontCase.equals("lower")) {
-                "(" + x._2.toLowerCase + ")"
-              } else {
-                "(" + x._2 + ")"
-              }
-            }
-          } else {
-            if (fontCase != null && fontCase.equals("lower")) {
-              x._2.toLowerCase
-            } else {
-              if (dropSurname) {
-                x._2.replace(" " + surname, "")
-              } else {
-                x._2
-              }
-            }
-          }
+          getFormattedEntry(clcnParenthesis, fontCase, dropSurname, surname, columnName, x)
         })
       }).map(x => {
         x.mkString(" ")
