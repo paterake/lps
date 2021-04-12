@@ -19,8 +19,6 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
 
   private val pdfDocument = getPdfDocument()
   private val document = getNewDocument()
-  private val subHeaderParagraphHeight = 23
-  private val maxLineCount = 29
 
   private val font_gujarati = FontBuilder.getFont()
 
@@ -92,7 +90,7 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
 
   def setSubHeader(clcnTxt: List[Text], alignment: TextAlignment, fontSize: Int): Unit = {
     val paragraph = getParagraph(alignment, 0)
-    paragraph.setHeight(subHeaderParagraphHeight)
+    paragraph.setHeight(Location.subHeaderParagraphHeight)
     clcnTxt.foreach(x => paragraph.add(x))
     paragraph.setBackgroundColor(ColorConstants.LIGHT_GRAY)
     paragraph.setFontColor(ColorConstants.WHITE)
@@ -231,7 +229,7 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
 
     var line0 = ""
     clcnAddressBook.foreach(entry => {
-      if (lineCount >= maxLineCount) {
+      if (lineCount >= Location.maxLineCount) {
         startNewPage(header + " (continued)", 0)
       }
       entry.zipWithIndex.foreach(line => {
