@@ -9,11 +9,15 @@ case class ModelCfgAddress(lineId: Int
                            , font: String
                            , fontSize: Int
                            , textAlignment: String
+                           , singleInd: Boolean
+                           , singleIdx: Int
                            , clcnLineElementRight: List[String]
                            , elementSeparatorRight: String
                            , fontRight: String
                            , fontSizeRight: Int
                            , textAlignmentRight: String
+                           , singleIndRight: Boolean
+                           , singleIdxRight: Int
                            , indexInd: Boolean
                            , dropSurname: Boolean
                           )

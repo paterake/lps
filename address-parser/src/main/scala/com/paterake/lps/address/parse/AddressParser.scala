@@ -53,7 +53,7 @@ class AddressParser(cfgAddressName: String, inputFileName: String, outputFileNam
     formattedEntry
   }
 
-  def getEntry(addressLine: (Int, Seq[(Int, String)]), clcnLineElement: List[String], clcnParenthesis: List[String], elementSeparator: String, fontCase: String, dropSurname: Boolean, surname: String): String = {
+  def getEntry(addressLine: (Int, Seq[(Int, String)]), clcnLineElement: List[String], clcnParenthesis: List[String], elementSeparator: String, fontCase: String, dropSurname: Boolean, surname: String, singleInd: Boolean, singleIdx: Int): String = {
     if (clcnLineElement == null || clcnLineElement.isEmpty) {
       null
     } else {
@@ -64,7 +64,17 @@ class AddressParser(cfgAddressName: String, inputFileName: String, outputFileNam
       }).map(x => {
         x.mkString(" ")
       })
-      val entry = clcnEntry.filter(p => p.nonEmpty).mkString(elementSeparator)
+      val entry = if (singleInd) {
+        if (clcnEntry.count(p => p.nonEmpty) == 1 && singleIdx == 1) {
+          clcnEntry.filter(p => p.nonEmpty).mkString(elementSeparator)
+        } else if (clcnEntry.count(p => p.nonEmpty) == 1 && singleIdx != 1) {
+          ""
+        } else {
+          clcnEntry(singleIdx-1)
+        }
+      } else {
+        clcnEntry.filter(p => p.nonEmpty).mkString(elementSeparator)
+      }
       entry
     }
   }
@@ -72,8 +82,8 @@ class AddressParser(cfgAddressName: String, inputFileName: String, outputFileNam
   def extractAddressLine(addressLine: (Int, Seq[(Int, String)])): List[(String, String)] = {
     val surname = addressLine._2(mainNameIndex)._2.split(" ").filterNot(p => p.equals("(Late)")).reverse.head
     val entry = clcnCfgAddress.sortBy(line => line.lineId).map(cfg => {
-      val leftEntry = getEntry(addressLine, cfg.clcnLineElement, cfg.clcnParenthesis, cfg.elementSeparator, cfg.fontCase, cfg.dropSurname, surname)
-      val rightEntry = getEntry(addressLine, cfg.clcnLineElementRight, cfg.clcnParenthesis, cfg.elementSeparatorRight, cfg.fontCase, cfg.dropSurname, surname)
+      val leftEntry = getEntry(addressLine, cfg.clcnLineElement, cfg.clcnParenthesis, cfg.elementSeparator, cfg.fontCase, cfg.dropSurname, surname, cfg.singleInd, cfg.singleIdx)
+      val rightEntry = getEntry(addressLine, cfg.clcnLineElementRight, cfg.clcnParenthesis, cfg.elementSeparatorRight, cfg.fontCase, cfg.dropSurname, surname, cfg.singleIndRight, cfg.singleIdxRight)
       (leftEntry, rightEntry)
     })
     //println(entry)

@@ -17,11 +17,13 @@
     "fontSize": 10,
     "fontCase": "initcap",
     "textAlignment": "LEFT",
-    "clcnLineElementRight": ["I"],
+    "clcnLineElementRight": ["I", "H"],
     "elementSeparatorRight": "/",
-    "fontRight": "Helvetica-Bold",
+    "fontRight": "Helvetica",
     "fontSizeRight": 8,
     "textAlignmentRight": "LEFT",
+    "singleIndRight": true,
+    "singleIdxRight": 1,
     "indexInd": true
   },
   {
@@ -36,7 +38,7 @@
     "textAlignment": "LEFT",
     "clcnLineElementRight": ["J"],
     "elementSeparatorRight": "/",
-    "fontRight": "Helvetica-Bold",
+    "fontRight": "Helvetica",
     "fontSizeRight": 8,
     "textAlignmentRight": "LEFT",
     "indexInd": true
@@ -59,10 +61,12 @@
     "font": "Helvetica",
     "fontSize": 7,
     "textAlignment": "LEFT",
-    "clcnLineElementRight": ["H"],
+    "clcnLineElementRight": ["I", "H"],
     "elementSeparatorRight": "/",
-    "fontRight": "Helvetica-Bold",
+    "fontRight": "Helvetica",
     "fontSizeRight": 8,
+    "singleIndRight": true,
+    "singleIdxRight": 2,
     "textAlignmentRight": "LEFT"
   },
   {
