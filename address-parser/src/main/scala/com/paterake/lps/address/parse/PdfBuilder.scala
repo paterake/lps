@@ -26,6 +26,7 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
   private var lineCount = 0
   private val clcnNameSuffix = scala.io.Source.fromInputStream(getClass.getResourceAsStream(Location.nameSuffix)).getLines.toList
   private val clcnNameIdx = new ListBuffer[ModelCfgIndex]()
+  private val clcnFailedTranslation = new ListBuffer[String]()
 
 
   def getPdfDocument(): PdfDocument = {
@@ -83,7 +84,7 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
     val txt = new Text(header).setFont(PdfFontFactory.createFont("Helvetica-Bold"))
     paragraph.add(txt)
     document.add(paragraph)
-    println(pdfDocument.getNumberOfPages + ":" + header)
+    //println(pdfDocument.getNumberOfPages + ":" + header)
     resetLineCount()
     incrementLineCount()
   }
@@ -230,7 +231,7 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
     var line0 = ""
     clcnAddressBook.foreach(entry => {
       if (lineCount >= Location.maxLineCount) {
-        startNewPage(header + " (continued)", 0)
+        startNewPage(header, 0)
       }
       entry.zipWithIndex.foreach(line => {
         if (line._1._1.nonEmpty) {
@@ -259,32 +260,48 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
     })
   }
 
+  def getPartTranslation(part: String): String = {
+    if (part.startsWith("(") || part.endsWith(")")) {
+      val partTranslation = try {
+        clcnTranslation(part.replace("(", "").replace(")", ""))
+      } catch {
+        case _: Exception => {
+          clcnFailedTranslation.append(part.replace("(", "").replace(")", ""))
+          //println("Failed to translate name part: " + part.replace("(", "").replace(")", ""))
+          ""
+        }
+      }
+      val newPart = StringBuilder.newBuilder
+      if (part.startsWith("(")) {
+        newPart.append("(")
+      }
+      newPart.append(partTranslation)
+      if (part.endsWith(")")) {
+        newPart.append(")")
+      }
+      newPart.mkString
+    } else {
+      try {
+        clcnTranslation(part)
+      } catch {
+        case _: Exception => {
+          clcnFailedTranslation.append(part)
+          //println("Failed to translate name part: " + part)
+          ""
+        }
+      }
+    }
+  }
+
   def getIndexName(mainName: String, spouseName: String): (String, String) = {
     val indexName = if (spouseName == null || spouseName.length < 1) {
       mainName
     } else {
       mainName + " (" + spouseName + ")"
     }
-    val translation = try {
-      mainName.replaceAll("\\(.*?\\)","").split(" ").map(part => {
-        if (part.startsWith("(") || part.endsWith(")")) {
-          val partTranslation = clcnTranslation(part.replace("(", "").replace(")", ""))
-          val newPart = StringBuilder.newBuilder
-          if (part.startsWith("(")) {
-            newPart.append("(")
-          }
-          newPart.append(partTranslation)
-          if (part.endsWith(")")) {
-            newPart.append(")")
-          }
-          newPart.mkString
-        } else {
-          clcnTranslation(part)
-        }
-      }).mkString(" ")
-    } catch {
-      case _: Exception => ""
-    }
+    val translation = mainName.replaceAll("\\(.*?\\)", "").split(" ").filter(p => p.nonEmpty).map(part => {
+      getPartTranslation(part)
+    }).mkString(" ")
     (indexName, translation)
   }
 
@@ -293,7 +310,7 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
       if (spouseVillageName == null || spouseVillageName.length < 1) {
         mainVillageName
       } else {
-        mainVillageName + " (" + spouseVillageName + ")"
+        mainVillageName + " (" + spouseVillageName.replaceAll("[\\[\\](){}]","") + ")"
       }
     villageName
   }
@@ -304,7 +321,7 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
     val fontSize = 5
 
     clcnNameIdx.sortBy(index => index.mainName).foreach(x => {
-      println(x)
+      //println(x)
       val indexName = getIndexName(x.mainName, x.spouseName)
       val villageName = getIndexVillageName(x.mainVillageName, x.spouseVillageName)
       val txtMainName = new Text(indexName._1).setFont(font)
@@ -319,6 +336,8 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
       table.addCell(getCell(txtPageNumber, TextAlignment.LEFT, fontSize))
     })
     document.add(table)
+    clcnFailedTranslation.toList.distinct.sorted.foreach(x => println("Failed to translate name part: " + x))
+
   }
 
 

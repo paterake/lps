@@ -4,11 +4,18 @@
     "blankPageCount": 2
   },
   {
-    "regionName": "bilston, wolverhamton",
-    "blankPageCount": 1
+    "regionName": "bilston",
+    "rename": "Bilston, Wolverhamton & Willenhall"
   },
   {
     "regionName": "leicester",
     "blankPageCount": 5
+  },
+  {
+    "regionName": "birmingham",
+    "rename": "Birmingham, West Bromwich & Dudley"
+  },
+  { "regionName": "sheet16",
+    "rename": ""
   }
 ]

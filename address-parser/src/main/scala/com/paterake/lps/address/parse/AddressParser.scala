@@ -42,6 +42,9 @@ class AddressParser(cfgAddressName: String, inputFileName: String, outputFileNam
         if (formattedEntry.contains("(")) {
           formattedEntry = formattedEntry.split('(').map(_.capitalize).mkString("(")
         }
+        if (formattedEntry.contains("-")) {
+          formattedEntry = formattedEntry.split('-').map(_.capitalize).mkString("-")
+        }
       }
     }
     if (clcnParenthesis != null && clcnParenthesis.contains(columnName) && entry._2.nonEmpty) {
@@ -100,12 +103,13 @@ class AddressParser(cfgAddressName: String, inputFileName: String, outputFileNam
     val pdfBuilder = new PdfBuilder(outputFileName, clcnTranslation)
     val workbook = SpreadsheetReader.openWorkbook(inputFileName, clcnArg)
     workbook.sheetIterator().asScala.foreach(f => {
-      val region = cfgRegion.getCfg(f.getSheetName)
-      pdfBuilder.startNewPage(f.getSheetName, region.blankPageCount)
+      val blankPageCount = cfgRegion.getCfgBlankPages(f.getSheetName)
+      val regionName = cfgRegion.getCfgRename(f.getSheetName)
+      pdfBuilder.startNewPage(regionName, blankPageCount)
       val (clcnHeader, clcnData) = SpreadsheetReader.extractSheet(f)
       val clcnAddressBook = setAddressBook(clcnData)
       //println(clcnAddressBook)
-      pdfBuilder.convertToPdf(f.getSheetName, clcnCfgAddress, clcnAddressBook)
+      pdfBuilder.convertToPdf(regionName, clcnCfgAddress, clcnAddressBook)
     })
     pdfBuilder.startNewPage("Index", 0)
     pdfBuilder.addNameIndex()
@@ -125,3 +129,4 @@ object AddressParser extends App {
   val parser = new AddressParser(cfgAddressName, sourceFileName, targetFileName)
   parser.processWorkbook(args)
 }
+
