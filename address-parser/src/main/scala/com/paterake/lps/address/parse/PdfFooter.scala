@@ -5,9 +5,12 @@ import com.itextpdf.kernel.pdf.PdfDocument
 import com.itextpdf.kernel.pdf.PdfPage
 import com.itextpdf.kernel.pdf.canvas.PdfCanvas
 import com.itextpdf.layout.Canvas
+import com.itextpdf.layout.borders.Border
+import com.itextpdf.layout.element.{Cell, Paragraph, Table, Text}
 import com.itextpdf.layout.property.TextAlignment
 
 class PdfFooter extends IEventHandler {
+
   def handleEvent(event: Event): Unit = {
     val docEvent = event.asInstanceOf[PdfDocumentEvent]
     val pdf = docEvent.getDocument
@@ -15,8 +18,8 @@ class PdfFooter extends IEventHandler {
     val pageSize = page.getPageSize
     val pdfCanvas = new PdfCanvas(page.getLastContentStream, page.getResources, pdf)
     val canvas = new Canvas(pdfCanvas, pdf, pageSize)
-    val x = (pageSize.getLeft + pageSize.getRight) / 2
+    val x = (pageSize.getLeft + pageSize.getRight) - 37
     val y = pageSize.getBottom + 15
-    canvas.showTextAligned(String.valueOf(pdf.getPageNumber(page)), x, y, TextAlignment.CENTER)
+    canvas.showTextAligned(String.valueOf(pdf.getPageNumber(page)), x, y, TextAlignment.RIGHT)
   }
 }

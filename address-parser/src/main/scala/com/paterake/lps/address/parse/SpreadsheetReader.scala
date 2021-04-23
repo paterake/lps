@@ -22,12 +22,12 @@ object SpreadsheetReader {
   def getCellValue(cell: Cell): String = {
     cell.getCellType match {
       case CellType.NUMERIC => cell.getNumericCellValue.toString
+      case CellType.FORMULA => cell.getCellFormula.toString.trim
       case _ => cell.getStringCellValue.trim
     }
   }
 
   def getHeaderRow(row: Row): Seq[(Int, String)] = {
-    //println(row.getLastCellNum)
     val clcnData = scala.collection.mutable.ListBuffer.empty[(Int, String)]
     (0 to row.getLastCellNum).foreach(idx => {
       val cell = row.getCell(idx, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK)
