@@ -80,7 +80,9 @@ class AddressParser(cfgAddressName: String, inputFileName: String, outputFileNam
   }
 
   def extractAddressLine(addressLine: (Int, Seq[(Int, String)])): List[(String, String)] = {
-    val surname = addressLine._2(mainNameIndex)._2.split(" ").filterNot(p => p.equals("(Late)")).reverse.head
+    val surname = addressLine._2(mainNameIndex)._2
+      .replaceAll("\\(.*?\\)", "")
+      .split(" ").filterNot(p => p.equals("(Late)")).reverse.head
     val entry = clcnCfgAddress.sortBy(line => line.lineId).map(cfg => {
       val leftEntry = getEntry(addressLine, cfg.clcnLineElement, cfg.clcnParenthesis, cfg.elementSeparator, cfg.fontCase, cfg.dropSurname, surname, cfg.singleInd, cfg.singleIdx)
       val rightEntry = getEntry(addressLine, cfg.clcnLineElementRight, cfg.clcnParenthesis, cfg.elementSeparatorRight, cfg.fontCase, cfg.dropSurname, surname, cfg.singleIndRight, cfg.singleIdxRight)

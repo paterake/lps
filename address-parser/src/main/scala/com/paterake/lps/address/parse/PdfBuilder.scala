@@ -218,6 +218,11 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
           } else {
             ""
           }
+
+        if (mainName.toLowerCase.contains("umadsihn")) {
+          //println(mainName)
+          null
+        }
         ModelCfgIndex(stripSuffix(mainName.replace(spouseVillage, "").trim), stripSuffix(spouseName), village, spouseVillage, header, pdfDocument.getNumberOfPages)
       }
     }
@@ -294,12 +299,18 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
   }
 
   def getIndexName(mainName: String, spouseName: String): (String, String) = {
-    val indexName = if (spouseName == null || spouseName.length < 1) {
-      mainName
+    val memberName = if (mainName.split(" ").size > 3) {
+      val clcnName = mainName.split(" ")
+      clcnName(0) + " " + clcnName(1) + " " + clcnName.reverse.head
     } else {
-      mainName + " (" + spouseName + ")"
+      mainName
     }
-    val translation = mainName.replaceAll("\\(.*?\\)", "").split(" ").filter(p => p.nonEmpty).map(part => {
+    val indexName = if (spouseName == null || spouseName.length < 1) {
+      memberName
+    } else {
+      memberName + " (" + spouseName + ")"
+    }
+    val translation = memberName.replaceAll("\\(.*?\\)", "").split(" ").filter(p => p.nonEmpty).map(part => {
       getPartTranslation(part)
     }).mkString(" ")
     (indexName, translation)
@@ -310,7 +321,7 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
       if (spouseVillageName == null || spouseVillageName.length < 1) {
         mainVillageName
       } else {
-        mainVillageName + " (" + spouseVillageName.replaceAll("[\\[\\](){}]","") + ")"
+        mainVillageName + " (" + spouseVillageName.replaceAll("[\\[\\](){}]", "") + ")"
       }
     villageName
   }
@@ -322,12 +333,19 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
 
     clcnNameIdx.sortBy(index => index.mainName).foreach(x => {
       //println(x)
-      val indexName = getIndexName(x.mainName, x.spouseName)
+      val regionName = if (x.region.toLowerCase.startsWith("rest")) {
+        x.region
+      }
+      else {
+        x.region.split(" ").head.stripSuffix(",")
+      }
+      //val indexName = getIndexName(x.mainName, x.spouseName)
+      val indexName = getIndexName(x.mainName.replaceAll("\\(.*?\\)", ""), x.spouseName.replaceAll("\\(.*?\\)", ""))
       val villageName = getIndexVillageName(x.mainVillageName, x.spouseVillageName)
       val txtMainName = new Text(indexName._1).setFont(font)
       val txtTranslation = new Text(indexName._2).setFont(font_gujarati)
       val txtVillage = new Text(villageName).setFont(font)
-      val txtRegion = new Text(x.region).setFont(font)
+      val txtRegion = new Text(regionName).setFont(font)
       val txtPageNumber = new Text(x.pageNumber.toString).setFont(font)
       table.addCell(getCell(txtMainName, TextAlignment.LEFT, fontSize))
       table.addCell(getCell(txtTranslation, TextAlignment.LEFT, fontSize))
