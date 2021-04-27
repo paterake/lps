@@ -3,6 +3,7 @@
     "lineId": 0,
     "lineComment": "Village subheader format",
     "clcnLineElement": ["A"],
+    "clcnLineElementRight": ["F"],
     "elementSeparator": " ",
     "font": "Helvetica-Bold",
     "fontSize": 12,

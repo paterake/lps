@@ -212,18 +212,18 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
         val mainName = entry(2)._1.split(" ").filterNot(p => p.equals("(Late)")).filterNot(p => p.equals("Patel")).mkString(" ")
         val spouseName = entry(1)._1.split(" ").filterNot(p => p.equals("(Late)")).filterNot(p => p.equals("Patel")).head
         val village = entry(0)._1
-        val spouseVillage =
-          if (entry(2)._1.split(" ").reverse.head.startsWith("(") && entry(2)._1.split(" ").reverse.head.endsWith(")")) {
-            entry(2)._1.split(" ").reverse.head
-          } else {
-            ""
-          }
-
+        val spouseVillage = entry(0)._2
         if (mainName.toLowerCase.contains("umadsihn")) {
           //println(mainName)
           null
         }
-        ModelCfgIndex(stripSuffix(mainName.replace(spouseVillage, "").trim), stripSuffix(spouseName), village, spouseVillage, header, pdfDocument.getNumberOfPages)
+        ModelCfgIndex(stripSuffix(mainName.replace(spouseVillage, "").replace("()", "").trim)
+          , stripSuffix(spouseName)
+          , village
+          , spouseVillage
+          , header
+          , pdfDocument.getNumberOfPages
+        )
       }
     }
     indexEntry
@@ -310,7 +310,7 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
     } else {
       memberName + " (" + spouseName + ")"
     }
-    val translation = memberName.replaceAll("\\(.*?\\)", "").split(" ").filter(p => p.nonEmpty).map(part => {
+    val translation = memberName.replaceAll("\\(.*?\\)", "").split(" ").filter(p => p.trim.nonEmpty).filter(p => p.length > 1).map(part => {
       getPartTranslation(part)
     }).mkString(" ")
     (indexName, translation)
