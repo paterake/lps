@@ -29,6 +29,7 @@
         <itext.version>7.1.14</itext.version>
         <jackson.version>2.6.7</jackson.version>
         <google-api-version>1.95.4</google-api-version>
+        <pdfbox-version>2.0.23</pdfbox-version>
     </properties>
 
     <dependencyManagement>
@@ -87,6 +88,16 @@
                 <groupId>com.google.cloud</groupId>
                 <artifactId>google-cloud-translate</artifactId>
                 <version>${google-api-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.pdfbox</groupId>
+                <artifactId>pdfbox</artifactId>
+                <version>${pdfbox-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.pdfbox</groupId>
+                <artifactId>fontbox</artifactId>
+                <version>${pdfbox-version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

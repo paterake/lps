@@ -71,8 +71,6 @@
     <orderEntry type="library" name="Maven: org.apache.xmlgraphics:batik-ttf2svg:1.13" level="project" />
     <orderEntry type="library" name="Maven: org.apache.xmlgraphics:batik-xml:1.13" level="project" />
     <orderEntry type="library" name="Maven: de.rototor.pdfbox:graphics2d:0.30" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.pdfbox:pdfbox:2.0.22" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.pdfbox:fontbox:2.0.22" level="project" />
     <orderEntry type="library" name="Maven: com.itextpdf:kernel:7.1.14" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.16" level="project" />
     <orderEntry type="library" name="Maven: com.itextpdf:io:7.1.14" level="project" />
@@ -84,6 +82,9 @@
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.6.7" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.module:jackson-module-paranamer:2.6.7" level="project" />
     <orderEntry type="library" name="Maven: com.thoughtworks.paranamer:paranamer:2.6" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.pdfbox:pdfbox:2.0.23" level="project" />
+    <orderEntry type="library" name="Maven: commons-logging:commons-logging:1.2" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.pdfbox:fontbox:2.0.23" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.scalatest:scalatest_2.11:3.1.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.scalatest:scalatest-compatible:3.1.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.scalactic:scalactic_2.11:3.1.0" level="project" />
