@@ -14,7 +14,7 @@ object Location {
 
   val font_collection_location = "/home/paterake/Documents/__cfg/fonts/Collected_Fonts/Gujarati_Sangam_MN/Gujarati_Sangam_MN.ttc"
   val font_gujarati_location = "/home/paterake/Documents/__cfg/fonts/noto_gujarati/NotoSansGujarati-Regular.ttf"
-  //val font_gujarati_location = "/home/paterake/Documents/__cfg/fonts/GujaratiSangamMN.ttf"
+  //val font_gujarati_location = "/home/paterake/Downloads/Rekha.ttf"
 
   val subHeaderParagraphHeight = 23
   val maxLineCount = 29

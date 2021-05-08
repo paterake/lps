@@ -8,11 +8,9 @@ import javax.imageio.ImageIO
 class TextToImageParser {
 
   def textToGraphic(text: String, fontSize: Int): Unit = {
-    val font = new Font("Helvetica", Font.BOLD, fontSize)
+    val font = new Font("Helvetica", Font.PLAIN, fontSize)
 
-
-
-    val img0 = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB)
+    val img0 = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB)
     val g2d0 = img0.createGraphics()
     g2d0.setFont(font)
     val fm0 = g2d0.getFontMetrics()
@@ -20,7 +18,7 @@ class TextToImageParser {
     val height = fm0.getHeight()
     g2d0.dispose()
 
-    val img = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_BINARY)
+    val img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
     val g2d = img.createGraphics()
     g2d.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
     g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -55,5 +53,5 @@ class TextToImageParser {
 
 object TextToImageParser extends App {
   val converter = new TextToImageParser
-  converter.textToGraphic("Hello (નમસ્તે)", 10)
+  converter.textToGraphic("આસ્તા", 12)
 }

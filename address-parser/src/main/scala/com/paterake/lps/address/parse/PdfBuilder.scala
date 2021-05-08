@@ -1,5 +1,6 @@
 package com.paterake.lps.address.parse
 
+import com.itextpdf.io.image.ImageDataFactory
 import com.itextpdf.kernel.colors.ColorConstants
 import com.itextpdf.kernel.events.PdfDocumentEvent
 import com.itextpdf.kernel.font.{PdfFont, PdfFontFactory}
@@ -8,7 +9,7 @@ import com.itextpdf.kernel.pdf.canvas.draw.SolidLine
 import com.itextpdf.kernel.pdf.{EncryptionConstants, PdfDocument, PdfReader, PdfWriter, WriterProperties}
 import com.itextpdf.layout.Document
 import com.itextpdf.layout.borders.Border
-import com.itextpdf.layout.element.{AreaBreak, Cell, LineSeparator, Paragraph, Table, Text}
+import com.itextpdf.layout.element.{AreaBreak, Cell, Image, LineSeparator, Paragraph, Table, Text}
 import com.itextpdf.layout.property.{AreaBreakType, TextAlignment}
 import com.paterake.lps.address.cfg.model.{ModelCfgAddress, ModelCfgIndex}
 
@@ -27,6 +28,8 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
   private val clcnNameSuffix = scala.io.Source.fromInputStream(getClass.getResourceAsStream(Location.nameSuffix)).getLines.toList
   private val clcnNameIdx = new ListBuffer[ModelCfgIndex]()
   private val clcnFailedTranslation = new ListBuffer[String]()
+
+  private val text2ImageParser = new TextToImageParser
 
 
   def getPdfDocument(): PdfDocument = {
@@ -92,7 +95,19 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
   def setSubHeader(clcnTxt: List[Text], alignment: TextAlignment, fontSize: Int): Unit = {
     val paragraph = getParagraph(alignment, 0)
     paragraph.setHeight(Location.subHeaderParagraphHeight)
-    clcnTxt.foreach(x => paragraph.add(x))
+    clcnTxt.zipWithIndex.foreach(x => {
+      paragraph.add(x._1)
+      /*
+      if (x._2.equals(0)) {
+        paragraph.add(x._1)
+      } else {
+        text2ImageParser.textToGraphic(x._1.getText, fontSize)
+        val imageData = ImageDataFactory.create(Location.tmpImageLocation)
+        val image = new Image(imageData)
+        paragraph.add(image)
+      }
+      */
+    })
     paragraph.setBackgroundColor(ColorConstants.LIGHT_GRAY)
     paragraph.setFontColor(ColorConstants.WHITE)
     document.add(paragraph)
@@ -213,10 +228,6 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
         val spouseName = entry(1)._1.split(" ").filterNot(p => p.equals("(Late)")).filterNot(p => p.equals("Patel")).head
         val village = entry(0)._1
         val spouseVillage = entry(0)._2
-        if (mainName.toLowerCase.contains("umadsihn")) {
-          //println(mainName)
-          null
-        }
         ModelCfgIndex(stripSuffix(mainName.replace(spouseVillage, "").replace("()", "").trim)
           , stripSuffix(spouseName)
           , village
@@ -355,7 +366,6 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
     })
     document.add(table)
     clcnFailedTranslation.toList.distinct.sorted.foreach(x => println("Failed to translate name part: " + x))
-
   }
 
 
