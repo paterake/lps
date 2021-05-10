@@ -26,6 +26,7 @@
         <maven.shade.version>3.2.1</maven.shade.version>
         <slf4j.version>1.7.16</slf4j.version>
         <apache.poi.version>5.0.0</apache.poi.version>
+        <apache.poi.ooxml.version>1.4</apache.poi.ooxml.version>
         <itext.version>7.1.14</itext.version>
         <jackson.version>2.6.7</jackson.version>
         <google-api-version>1.95.4</google-api-version>
@@ -41,8 +42,18 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.poi</groupId>
+                <artifactId>poi</artifactId>
+                <version>${apache.poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
                 <artifactId>poi-ooxml</artifactId>
                 <version>${apache.poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>ooxml-schemas</artifactId>
+                <version>${apache.poi.ooxml.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.scalatest</groupId>
