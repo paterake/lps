@@ -1,7 +1,8 @@
-package com.paterake.lps.address.parse
+package com.paterake.lps.address.builder
 
 import com.itextpdf.io.font.{PdfEncodings, TrueTypeCollection}
 import com.itextpdf.kernel.font.{PdfFont, PdfFontFactory}
+import com.paterake.lps.address.parse.Location
 
 object FontBuilder {
 
@@ -12,7 +13,7 @@ object FontBuilder {
     font_gujarati
   }
 
-  def listFontCollection(ttc:TrueTypeCollection): Unit = {
+  def listFontCollection(ttc: TrueTypeCollection): Unit = {
     val ttcSize = ttc.getTTCSize
     println(ttcSize)
     for (i <- 0 to ttcSize - 1) {

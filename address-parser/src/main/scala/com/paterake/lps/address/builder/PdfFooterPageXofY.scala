@@ -1,9 +1,8 @@
-package com.paterake.lps.address.parse
+package com.paterake.lps.address.builder
 
 import com.itextpdf.kernel.events.{Event, IEventHandler, PdfDocumentEvent}
 import com.itextpdf.kernel.geom.Rectangle
 import com.itextpdf.kernel.pdf.PdfDocument
-import com.itextpdf.kernel.pdf.PdfPage
 import com.itextpdf.kernel.pdf.canvas.PdfCanvas
 import com.itextpdf.kernel.pdf.xobject.PdfFormXObject
 import com.itextpdf.layout.Canvas

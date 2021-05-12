@@ -1,4 +1,6 @@
-package com.paterake.lps.address.parse
+package com.paterake.lps.address.builder
+
+import com.paterake.lps.address.parse.Location
 
 import java.awt.image.BufferedImage
 import java.awt.{Color, Font, RenderingHints}

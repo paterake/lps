@@ -1,12 +1,9 @@
-package com.paterake.lps.address.parse
+package com.paterake.lps.address.builder
 
 import com.itextpdf.kernel.events.{Event, IEventHandler, PdfDocumentEvent}
-import com.itextpdf.kernel.pdf.PdfDocument
-import com.itextpdf.kernel.pdf.PdfPage
 import com.itextpdf.kernel.pdf.canvas.PdfCanvas
 import com.itextpdf.layout.Canvas
-import com.itextpdf.layout.borders.Border
-import com.itextpdf.layout.element.{Cell, Paragraph, Table, Text}
+import com.itextpdf.layout.element.Paragraph
 import com.itextpdf.layout.property.TextAlignment
 
 class PdfFooter extends IEventHandler {

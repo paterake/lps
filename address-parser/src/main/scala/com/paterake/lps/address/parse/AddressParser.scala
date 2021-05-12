@@ -1,5 +1,6 @@
 package com.paterake.lps.address.parse
 
+import com.paterake.lps.address.builder.DocumentBuilder
 import com.paterake.lps.address.cfg.reader.{CfgAddress, CfgRegion}
 
 class AddressParser(cfgAddressName: String, inputFileName: String, outputFileName: String) {
@@ -112,29 +113,23 @@ class AddressParser(cfgAddressName: String, inputFileName: String, outputFileNam
 
   def processWorkbook(clcnArg: Array[String]): Unit = {
     val clcnTranslation = new LanguageParser().getTranslation(null)
-    //val pdfBuilder = new PdfBuilder(outputFileName, clcnTranslation)
+    //val docBuilder = new PdfBuilder(outputFileName, clcnTranslation)
     val docBuilder = new DocumentBuilder(outputFileName, clcnTranslation)
     val workbook = SpreadsheetReader.openWorkbook(inputFileName, clcnArg)
     workbook.sheetIterator().asScala.foreach(f => {
       val blankPageCount = cfgRegion.getCfgBlankPages(f.getSheetName)
       val regionName = cfgRegion.getCfgRename(f.getSheetName)
-      //pdfBuilder.startNewPage(regionName, blankPageCount)
       docBuilder.startNewPage(regionName, blankPageCount)
       val (clcnHeader, clcnData) = SpreadsheetReader.extractSheet(f)
       val clcnAddressBook = setAddressBook(clcnData)
       //println(clcnAddressBook)
-      //pdfBuilder.convertToPdf(regionName, clcnCfgAddress, clcnAddressBook)
       docBuilder.convertToDoc(regionName, clcnCfgAddress, clcnAddressBook)
     })
-    //pdfBuilder.startNewPage("Index", 0)
     docBuilder.startNewPage("Index", 0)
-    //pdfBuilder.addNameIndex()
     docBuilder.addNameIndex()
     if (clcnArg.length == 1) {
-      //pdfBuilder.closeDocument(clcnArg(0))
       docBuilder.closeDocument(clcnArg(0))
     } else {
-      //pdfBuilder.closeDocument()
       docBuilder.closeDocument()
     }
   }

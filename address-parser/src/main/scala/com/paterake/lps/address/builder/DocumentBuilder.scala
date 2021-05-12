@@ -1,4 +1,4 @@
-package com.paterake.lps.address.parse
+package com.paterake.lps.address.builder
 
 import com.paterake.lps.address.cfg.model.ModelCfgAddress
 import org.apache.poi.xwpf.usermodel.{ParagraphAlignment, TableRowAlign, XWPFDocument, XWPFParagraph}
@@ -42,6 +42,7 @@ class DocumentBuilder(outputFileName: String, clcnTranslation: Map[String, Strin
     val run = paragraph.createRun()
     run.setBold(true)
     run.setFontFamily(fontDefault)
+    run.setFontSize(12)
     run.setText(header)
     resetLineCount()
     incrementLineCount()
@@ -170,7 +171,7 @@ class DocumentBuilder(outputFileName: String, clcnTranslation: Map[String, Strin
 
     if (!section.isSetPgSz) section.addNewPgSz
     val pageSize = section.getPgSz
-    pageSize.setOrient(STPageOrientation.PORTRAIT)
+    //pageSize.setOrient(STPageOrientation.PORTRAIT)
     pageSize.setH(BigInteger.valueOf(595))
     pageSize.setW(BigInteger.valueOf(420))
     */

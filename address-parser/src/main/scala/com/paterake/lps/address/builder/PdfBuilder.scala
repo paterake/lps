@@ -1,17 +1,17 @@
-package com.paterake.lps.address.parse
+package com.paterake.lps.address.builder
 
-import com.itextpdf.io.image.ImageDataFactory
 import com.itextpdf.kernel.colors.ColorConstants
 import com.itextpdf.kernel.events.PdfDocumentEvent
 import com.itextpdf.kernel.font.{PdfFont, PdfFontFactory}
 import com.itextpdf.kernel.geom.PageSize
 import com.itextpdf.kernel.pdf.canvas.draw.SolidLine
-import com.itextpdf.kernel.pdf.{EncryptionConstants, PdfDocument, PdfReader, PdfWriter, WriterProperties}
+import com.itextpdf.kernel.pdf._
 import com.itextpdf.layout.Document
 import com.itextpdf.layout.borders.Border
-import com.itextpdf.layout.element.{AreaBreak, Cell, Image, LineSeparator, Paragraph, Table, Text}
+import com.itextpdf.layout.element.{AreaBreak, Cell, LineSeparator, Paragraph, Table, Text}
 import com.itextpdf.layout.property.{AreaBreakType, TextAlignment}
 import com.paterake.lps.address.cfg.model.{ModelCfgAddress, ModelCfgIndex}
+import com.paterake.lps.address.parse.Location
 
 import java.io.FileOutputStream
 import scala.collection.mutable.ListBuffer
@@ -240,7 +240,7 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
     indexEntry
   }
 
-  def convertToPdf(header: String, clcnCfgAddress: List[ModelCfgAddress], clcnAddressBook: List[List[(String, String)]]): Unit = {
+  def convertToDoc(header: String, clcnCfgAddress: List[ModelCfgAddress], clcnAddressBook: List[List[(String, String)]]): Unit = {
 
     val (clcnFont, clcnFontSize, clcnAlignment, clcnFontRight, clcnFontSizeRight, clcnAlignmentRight) = getParagraghFormat(clcnCfgAddress)
 
