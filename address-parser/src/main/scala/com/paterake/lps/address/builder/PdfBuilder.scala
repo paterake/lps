@@ -209,37 +209,6 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
     table
   }
 
-  def stripSuffix(name: String): String = {
-    val newName = clcnNameSuffix.foldLeft(name)((a, b) => a.replaceAll(b, ""))
-    //val newName = name.split(" ").map(x => clcnNameSuffix.foldLeft(x)((a, b) => a.stripSuffix(b))).mkString(" ")
-    newName
-  }
-
-  def getIndexEntry(entryLineNumber: Int, entry: List[(String, String)], header: String): ModelCfgIndex = {
-    val indexEntry = {
-      if (entryLineNumber.equals(1)) {
-        val mainName = entry(1)._1.split(" ").filterNot(p => p.equals("(Late)")).filterNot(p => p.equals("Patel")).mkString(" ")
-        val spouseName = entry(2)._1.split(" ").filterNot(p => p.equals("(Late)")).filterNot(p => p.equals("Patel")).head
-        val village = entry(0)._1
-        val spouseVillage = null
-        ModelCfgIndex(stripSuffix(mainName), stripSuffix(spouseName), village, spouseVillage, header, pdfDocument.getNumberOfPages)
-      } else {
-        val mainName = entry(2)._1.split(" ").filterNot(p => p.equals("(Late)")).filterNot(p => p.equals("Patel")).mkString(" ")
-        val spouseName = entry(1)._1.split(" ").filterNot(p => p.equals("(Late)")).filterNot(p => p.equals("Patel")).head
-        val village = entry(0)._1
-        val spouseVillage = entry(0)._2
-        ModelCfgIndex(stripSuffix(mainName.replace(spouseVillage, "").replace("()", "").trim)
-          , stripSuffix(spouseName)
-          , village
-          , spouseVillage
-          , header
-          , pdfDocument.getNumberOfPages
-        )
-      }
-    }
-    indexEntry
-  }
-
   def convertToDoc(header: String, clcnCfgAddress: List[ModelCfgAddress], clcnAddressBook: List[List[(String, String)]]): Unit = {
 
     val (clcnFont, clcnFontSize, clcnAlignment, clcnFontRight, clcnFontSizeRight, clcnAlignmentRight) = getParagraghFormat(clcnCfgAddress)
@@ -266,7 +235,7 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
             }
           }
           if (clcnCfgAddress(line._2).indexInd) {
-            clcnNameIdx.append(getIndexEntry(line._2, entry, header))
+            clcnNameIdx.append(DocumentUtility.getIndexEntry(line._2, entry, header, pdfDocument.getNumberOfPages))
           }
           if (line._2 == 1) {
             //println("Position: " + line._1._1 + ":" + line._1._2 + ":" + lineCount)
