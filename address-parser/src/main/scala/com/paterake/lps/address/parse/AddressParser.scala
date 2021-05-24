@@ -125,8 +125,8 @@ class AddressParser(cfgAddressName: String, inputFileName: String, outputFileNam
       //println(clcnAddressBook)
       docBuilder.convertToDoc(regionName, clcnCfgAddress, clcnAddressBook)
     })
-    docBuilder.startNewPage("Index", 0)
-    docBuilder.addNameIndex()
+    //docBuilder.startNewPage("Index", 0)
+    docBuilder.addNameIndex("Index", 0)
     if (clcnArg.length == 1) {
       docBuilder.closeDocument(clcnArg(0))
     } else {
