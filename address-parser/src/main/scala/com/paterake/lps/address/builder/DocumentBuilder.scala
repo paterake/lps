@@ -112,7 +112,7 @@ class DocumentBuilder(outputFileName: String, clcnTranslation: Map[String, Strin
     addGap()
     val paragraph = getParagragh("D3D3D3", ParagraphAlignment.CENTER)
     setSubHeaderText(paragraph, clcnText(0), fontDefault, fontSize)
-    setSubHeaderText(paragraph, clcnText(1), fontGujarati, fontSize)
+    setSubHeaderText(paragraph, " " + clcnText(1), fontGujarati, fontSize)
     addGap()
     incrementLineCount()
     incrementLineCount()

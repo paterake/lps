@@ -46,7 +46,7 @@ object DocumentUtility {
   }
 
   def getIndexEntry(entryLineNumber: Int, entry: List[(String, String)], header: String, pageCount: Int): ModelCfgIndex = {
-    val clcnDrop = Seq("(late)", "patel", "das-patel", "vara-patel", "patel-surdhar")
+    val clcnDrop = Seq("(late)", "patel", "das-patel", "vara-patel", "patel-surdhar", "patidar", "ghoshdastidar")
     val indexEntry = {
       if (entryLineNumber.equals(1)) {
         val mainName = entry(1)._1.split(" ").filterNot(p => clcnDrop.contains(p.toLowerCase)).mkString(" ")
@@ -117,15 +117,26 @@ object DocumentUtility {
   def getIndexName(clcnTranslation: Map[String, String], mainName: String, spouseName: String): (String, String) = {
     val memberName = if (mainName.split(" ").size > 3) {
       val clcnName = mainName.split(" ")
-      clcnName(0) + " " + clcnName(1) + " " + clcnName.reverse.head
-      //clcnName(0) + " " + clcnName(1)
+      val tmpName = clcnName(0) + " " + clcnName(1) + " " + clcnName.reverse.head
+      val idxName = if (tmpName.size > 24) {
+        clcnName(0) + " " + clcnName(1)
+      } else {
+        tmpName
+      }
+      if (idxName.length > 24) {
+        println(idxName)
+      }
+      idxName
+    } else if (mainName.length > 24) {
+      val clcnName = mainName.split(" ")
+      clcnName(0) + " " + clcnName(1)
     } else {
       mainName
     }
     val indexName = if (spouseName == null || spouseName.length < 1) {
-      memberName
+      memberName.trim
     } else {
-      memberName + " (" + spouseName + ")"
+      memberName.trim + " (" + spouseName + ")"
     }
     val translation = memberName.replaceAll("\\(.*?\\)", "").split(" ").filter(p => p.trim.nonEmpty).filter(p => p.length > 1).map(part => {
       getPartTranslation(part, clcnTranslation)
