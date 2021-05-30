@@ -113,7 +113,6 @@ class AddressParser(cfgAddressName: String, inputFileName: String, outputFileNam
 
   def processWorkbook(clcnArg: Array[String]): Unit = {
     val clcnTranslation = new LanguageParser().getTranslation(null)
-    //val docBuilder = new PdfBuilder(outputFileName, clcnTranslation)
     val docBuilder = new DocumentBuilder(outputFileName, clcnTranslation)
     val workbook = SpreadsheetReader.openWorkbook(inputFileName, clcnArg)
     workbook.sheetIterator().asScala.foreach(f => {

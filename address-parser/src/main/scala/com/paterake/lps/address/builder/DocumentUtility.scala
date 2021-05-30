@@ -1,13 +1,22 @@
 package com.paterake.lps.address.builder
 
 import com.paterake.lps.address.cfg.model.{ModelCfgAddress, ModelCfgIndex}
-import com.paterake.lps.address.parse.Location
+import com.paterake.lps.address.parse.{LanguageParser, Location}
 
 import scala.collection.mutable.ListBuffer
 
 object DocumentUtility {
-  private val clcnNameSuffix = scala.io.Source.fromInputStream(getClass.getResourceAsStream(Location.nameSuffix)).getLines.toList
+  private val clcnNameSuffix = scala.io.Source.fromInputStream(getClass.getResourceAsStream(Location.nameSuffix)).getLines.toList.sortBy(-_.size)
+  private val clcnIndexNameDrop = scala.io.Source.fromInputStream(getClass.getResourceAsStream(Location.indexNameDrop)).getLines.toList.sorted
   private val clcnFailedTranslation = new ListBuffer[String]()
+
+  def getNameSuffix(): List[String] = {
+    clcnNameSuffix
+  }
+
+  def getIndexNameDrop(): List[String] = {
+    clcnIndexNameDrop
+  }
 
   def outputFailedTranslation(): Unit = {
     clcnFailedTranslation.toList.distinct.sorted.foreach(x => println("Failed to translate name part: " + x))
@@ -39,28 +48,38 @@ object DocumentUtility {
     (clcnFont.toMap, clcnFontSize.toMap, clcnAlignment.toMap, clcnFontRight.toMap, clcnFontSizeRight.toMap, clcnAlignmentRight.toMap)
   }
 
-  def stripSuffix(name: String): String = {
+  def stripNameSuffix(name: String, clcnTranslation: Map[String, String]): String = {
     val newName = clcnNameSuffix.foldLeft(name)((a, b) => a.replaceAll(b, ""))
     //val newName = name.split(" ").map(x => clcnNameSuffix.foldLeft(x)((a, b) => a.stripSuffix(b))).mkString(" ")
-    newName
+    val outputName = if (clcnTranslation.contains(newName)) {
+      newName
+    } else if (clcnTranslation.contains(name)) {
+      name
+    } else {
+      newName
+    }
+    if (name.toLowerCase.equals("ratilal")) {
+      println(outputName)
+    }
+    outputName
+
   }
 
-  def getIndexEntry(entryLineNumber: Int, entry: List[(String, String)], header: String, pageCount: Int): ModelCfgIndex = {
-    val clcnDrop = Seq("(late)", "patel", "das-patel", "vara-patel", "patel-surdhar", "patidar", "ghoshdastidar")
+  def getIndexEntry(entryLineNumber: Int, entry: List[(String, String)], header: String, pageCount: Int, clcnTranslation: Map[String, String]): ModelCfgIndex = {
     val indexEntry = {
       if (entryLineNumber.equals(1)) {
-        val mainName = entry(1)._1.split(" ").filterNot(p => clcnDrop.contains(p.toLowerCase)).mkString(" ")
-        val spouseName = entry(2)._1.split(" ").filterNot(p => clcnDrop.contains(p.toLowerCase)).head
+        val mainName = entry(1)._1.split(" ").filterNot(p => clcnIndexNameDrop.contains(p.toLowerCase)).mkString(" ")
+        val spouseName = entry(2)._1.split(" ").filterNot(p => clcnIndexNameDrop.contains(p.toLowerCase)).head
         val village = entry(0)._1
         val spouseVillage = null
-        ModelCfgIndex(stripSuffix(mainName), stripSuffix(spouseName), village, spouseVillage, header, pageCount)
+        ModelCfgIndex(stripNameSuffix(mainName, clcnTranslation), stripNameSuffix(spouseName, clcnTranslation), village, spouseVillage, header, pageCount)
       } else {
-        val mainName = entry(2)._1.split(" ").filterNot(p => clcnDrop.contains(p.toLowerCase)).mkString(" ")
-        val spouseName = entry(1)._1.split(" ").filterNot(p => clcnDrop.contains(p.toLowerCase)).head
+        val mainName = entry(2)._1.split(" ").filterNot(p => clcnIndexNameDrop.contains(p.toLowerCase)).mkString(" ")
+        val spouseName = entry(1)._1.split(" ").filterNot(p => clcnIndexNameDrop.contains(p.toLowerCase)).head
         val village = entry(0)._1
         val spouseVillage = entry(0)._2
-        ModelCfgIndex(stripSuffix(mainName.replace(spouseVillage, "").replace("()", "").trim)
-          , stripSuffix(spouseName)
+        ModelCfgIndex(stripNameSuffix(mainName.replace(spouseVillage, "").replace("()", "").trim, clcnTranslation)
+          , stripNameSuffix(spouseName, clcnTranslation)
           , village
           , spouseVillage
           , header
@@ -153,8 +172,6 @@ object DocumentUtility {
       }
     villageName
   }
-
-
 
 
 }

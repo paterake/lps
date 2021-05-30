@@ -327,7 +327,7 @@ class DocumentBuilder(outputFileName: String, clcnTranslation: Map[String, Strin
             }
           }
           if (clcnCfgAddress(line._2).indexInd) {
-            appendNameIndex(DocumentUtility.getIndexEntry(line._2, entry, header, pageCount))
+            appendNameIndex(DocumentUtility.getIndexEntry(line._2, entry, header, pageCount, clcnTranslation))
           }
         }
       })

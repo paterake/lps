@@ -234,7 +234,7 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
             }
           }
           if (clcnCfgAddress(line._2).indexInd) {
-            clcnNameIdx.append(DocumentUtility.getIndexEntry(line._2, entry, header, pdfDocument.getNumberOfPages))
+            clcnNameIdx.append(DocumentUtility.getIndexEntry(line._2, entry, header, pdfDocument.getNumberOfPages, clcnTranslation))
           }
           if (line._2 == 1) {
             //println("Position: " + line._1._1 + ":" + line._1._2 + ":" + lineCount)
