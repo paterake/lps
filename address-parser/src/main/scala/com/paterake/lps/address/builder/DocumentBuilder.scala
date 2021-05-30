@@ -19,7 +19,7 @@ class DocumentBuilder(outputFileName: String, clcnTranslation: Map[String, Strin
   private val fontGujarati = "Noto Sans Gujarati"
   //private val fontGujarati = "Gujarati Sangam MN"
 
-  private var pageCount = 1
+  private var pageCount = 0
   private var lineCount = 0
   private val clcnNameIdx = new ListBuffer[ModelCfgIndex]()
 
@@ -327,7 +327,7 @@ class DocumentBuilder(outputFileName: String, clcnTranslation: Map[String, Strin
             }
           }
           if (clcnCfgAddress(line._2).indexInd) {
-            appendNameIndex(DocumentUtility.getIndexEntry(line._2, entry, header, pageCount, clcnTranslation))
+            appendNameIndex(DocumentUtility.getIndexEntry(line._2, entry, header, pageCount))
           }
         }
       })

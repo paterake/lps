@@ -15,6 +15,6 @@ object SortTest extends App {
 
   println(DocumentUtility.getIndexNameDrop())
 
-  println(DocumentUtility.stripNameSuffix("Ramkumari", null))
+  println(DocumentUtility.stripNameSuffix("Ramkumari"))
 
 }

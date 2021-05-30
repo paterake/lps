@@ -48,38 +48,31 @@ object DocumentUtility {
     (clcnFont.toMap, clcnFontSize.toMap, clcnAlignment.toMap, clcnFontRight.toMap, clcnFontSizeRight.toMap, clcnAlignmentRight.toMap)
   }
 
-  def stripNameSuffix(name: String, clcnTranslation: Map[String, String]): String = {
+  def stripNameSuffix(name: String): String = {
     val newName = clcnNameSuffix.foldLeft(name)((a, b) => a.replaceAll(b, ""))
     //val newName = name.split(" ").map(x => clcnNameSuffix.foldLeft(x)((a, b) => a.stripSuffix(b))).mkString(" ")
-    val outputName = if (clcnTranslation.contains(newName)) {
-      newName
-    } else if (clcnTranslation.contains(name)) {
-      name
-    } else {
-      newName
+    val newName2 = newName.replaceAll("Rati", "Ratilal")
+    if (newName2.contains("Rati")) {
+      println(newName2)
     }
-    if (name.toLowerCase.equals("ratilal")) {
-      println(outputName)
-    }
-    outputName
-
+    newName2
   }
 
-  def getIndexEntry(entryLineNumber: Int, entry: List[(String, String)], header: String, pageCount: Int, clcnTranslation: Map[String, String]): ModelCfgIndex = {
+  def getIndexEntry(entryLineNumber: Int, entry: List[(String, String)], header: String, pageCount: Int): ModelCfgIndex = {
     val indexEntry = {
       if (entryLineNumber.equals(1)) {
         val mainName = entry(1)._1.split(" ").filterNot(p => clcnIndexNameDrop.contains(p.toLowerCase)).mkString(" ")
         val spouseName = entry(2)._1.split(" ").filterNot(p => clcnIndexNameDrop.contains(p.toLowerCase)).head
         val village = entry(0)._1
         val spouseVillage = null
-        ModelCfgIndex(stripNameSuffix(mainName, clcnTranslation), stripNameSuffix(spouseName, clcnTranslation), village, spouseVillage, header, pageCount)
+        ModelCfgIndex(stripNameSuffix(mainName), stripNameSuffix(spouseName), village, spouseVillage, header, pageCount)
       } else {
         val mainName = entry(2)._1.split(" ").filterNot(p => clcnIndexNameDrop.contains(p.toLowerCase)).mkString(" ")
         val spouseName = entry(1)._1.split(" ").filterNot(p => clcnIndexNameDrop.contains(p.toLowerCase)).head
         val village = entry(0)._1
         val spouseVillage = entry(0)._2
-        ModelCfgIndex(stripNameSuffix(mainName.replace(spouseVillage, "").replace("()", "").trim, clcnTranslation)
-          , stripNameSuffix(spouseName, clcnTranslation)
+        ModelCfgIndex(stripNameSuffix(mainName.replace(spouseVillage, "").replace("()", "").trim)
+          , stripNameSuffix(spouseName)
           , village
           , spouseVillage
           , header
