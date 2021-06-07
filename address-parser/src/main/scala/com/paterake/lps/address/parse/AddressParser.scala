@@ -46,6 +46,15 @@ class AddressParser(cfgAddressName: String, inputFileName: String, outputFileNam
         if (formattedEntry.contains("-")) {
           formattedEntry = formattedEntry.split('-').map(_.capitalize).mkString("-")
         }
+        if (formattedEntry.split(" ").contains("Uk")) {
+          formattedEntry = formattedEntry.split(" ").map(x => {
+            if (x.equals("Uk")) {
+              x.toUpperCase
+            } else {
+              x
+            }
+          }).mkString(" ")
+        }
       }
     }
     if (clcnParenthesis != null && clcnParenthesis.contains(columnName) && entry._2.nonEmpty) {

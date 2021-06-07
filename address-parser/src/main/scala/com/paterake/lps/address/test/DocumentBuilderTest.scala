@@ -24,7 +24,7 @@ class DocumentBuilderTest {
     val r2 = p2.createRun()
     r2.setText("Text body....")
 
-    builder.setSubHeader(Seq("Asta", " (આસ્તા)"), 8)
+    builder.setSubHeader(Seq("Asta", " (આસ્તા)"), 12)
 
     builder.addText(Seq("val1", "val2"), clcnFontSize, clcnFont)
     builder.addText(Seq("val3"), clcnFontSize, clcnFont)

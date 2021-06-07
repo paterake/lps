@@ -51,10 +51,14 @@ object DocumentUtility {
   def stripNameSuffix(name: String): String = {
     val newName = clcnNameSuffix.foldLeft(name)((a, b) => a.replaceAll(b, ""))
     //val newName = name.split(" ").map(x => clcnNameSuffix.foldLeft(x)((a, b) => a.stripSuffix(b))).mkString(" ")
-    val newName2 = newName.replaceAll("Rati", "Ratilal")
-    if (newName2.contains("Rati")) {
-      println(newName2)
-    }
+    val newName2 = newName.split(" ").map(x => {
+      if (x.equals("Rati")) {
+        x + "lal"
+      } else {
+        x
+      }
+    }).mkString(" ")
+    //val newName2 = newName.replaceAll("Rati", "Ratilal")
     newName2
   }
 

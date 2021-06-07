@@ -99,6 +99,16 @@ class DocumentBuilder(outputFileName: String, clcnTranslation: Map[String, Strin
   }
 
   def setSubHeaderText(paragraph: XWPFParagraph, text: String, font: String, fontSize: Int): Unit = {
+    val spacing = if (paragraph.getCTP.getPPr.isSetSpacing) {
+      paragraph.getCTP.getPPr.getSpacing
+    } else {
+      paragraph.getCTP.getPPr.addNewSpacing()
+    }
+    //spacing.setAfter(200)
+    //spacing.setBefore(200)
+    paragraph.setSpacingBetween(1)
+
+
     val run = paragraph.createRun()
     run.setText(text)
     run.setBold(true)
@@ -218,6 +228,15 @@ class DocumentBuilder(outputFileName: String, clcnTranslation: Map[String, Strin
 
     if (paragraph.getCTP().getPPr() == null) paragraph.getCTP().addNewPPr()
     if (paragraph.getCTP().getPPr().getShd() != null) paragraph.getCTP().getPPr().unsetShd()
+
+    val spacing = if (paragraph.getCTP.getPPr.isSetSpacing) {
+      paragraph.getCTP.getPPr.getSpacing
+    } else {
+      paragraph.getCTP.getPPr.addNewSpacing()
+    }
+    //spacing.setAfter(200)
+    //spacing.setBefore(200)
+    paragraph.setSpacingBetween(1.3)
 
     val tabStop = paragraph.getCTP().getPPr().addNewTabs().addNewTab();
     tabStop.setPos("9000")
