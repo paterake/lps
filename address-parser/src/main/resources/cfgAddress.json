@@ -60,7 +60,7 @@
     "clcnLineElement": ["G"],
     "elementSeparator": " ",
     "font": "Helvetica",
-    "fontSize": 7,
+    "fontSize": 8,
     "textAlignment": "LEFT",
     "clcnLineElementRight": ["H"],
     "elementSeparatorRight": "/",
@@ -77,7 +77,7 @@
     "elementSeparator": ", ",
     "fontCase": "lower",
     "font": "Helvetica",
-    "fontSize": 7,
+    "fontSize": 8,
     "textAlignment": "LEFT"
   }
 ]
