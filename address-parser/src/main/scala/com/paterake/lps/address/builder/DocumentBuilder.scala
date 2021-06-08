@@ -27,9 +27,16 @@ class DocumentBuilder(outputFileName: String, clcnTranslation: Map[String, Strin
     document
   }
 
+  def getParagraph(): XWPFParagraph = {
+    val paragraph = document.createParagraph()
+    if (paragraph.getCTP().getPPr() == null) paragraph.getCTP().addNewPPr()
+    if (paragraph.getCTP().getPPr().getShd() != null) paragraph.getCTP().getPPr().unsetShd()
+    paragraph
+  }
+
 
   def setPageBreak(): Unit = {
-    val break = document.createParagraph()
+    val break = getParagraph()
     break.setPageBreak(true)
     pageCount += 1
   }
@@ -46,7 +53,7 @@ class DocumentBuilder(outputFileName: String, clcnTranslation: Map[String, Strin
     for (x <- 0 to blankPageCount) {
       setPageBreak()
     }
-    val paragraph = document.createParagraph()
+    val paragraph = getParagraph()
     paragraph.setAlignment(ParagraphAlignment.CENTER)
     val run = paragraph.createRun()
     run.setBold(true)
@@ -74,10 +81,7 @@ class DocumentBuilder(outputFileName: String, clcnTranslation: Map[String, Strin
 
 
   def getParagragh(fillColor: String, paragraphAlignment: ParagraphAlignment): XWPFParagraph = {
-    val paragraph = document.createParagraph()
-
-    if (paragraph.getCTP().getPPr() == null) paragraph.getCTP().addNewPPr()
-    if (paragraph.getCTP().getPPr().getShd() != null) paragraph.getCTP().getPPr().unsetShd()
+    val paragraph = getParagraph()
 
     paragraph.getCTP().getPPr().addNewShd()
     paragraph.getCTP().getPPr().getShd().setVal(org.openxmlformats.schemas.wordprocessingml.x2006.main.STShd.CLEAR)
@@ -90,7 +94,7 @@ class DocumentBuilder(outputFileName: String, clcnTranslation: Map[String, Strin
   }
 
   def addGap(): Unit = {
-    val paragraph = document.createParagraph()
+    val paragraph = getParagraph()
     val run = paragraph.createRun()
     run.setFontSize(4)
     run.setFontFamily(fontDefault)
@@ -217,17 +221,14 @@ class DocumentBuilder(outputFileName: String, clcnTranslation: Map[String, Strin
       }
     })
 
-    val paragraph = document.createParagraph()
+    val paragraph = getParagraph()
     paragraph.setAlignment(ParagraphAlignment.CENTER)
     paragraph.setSpacingBetween(2)
     //val run = paragraph.createRun()
   }
 
   def addTextTab(clcnText: Seq[String], clcnFontSize: Seq[Int], clcnFont: Seq[String]): Unit = {
-    val paragraph = document.createParagraph()
-
-    if (paragraph.getCTP().getPPr() == null) paragraph.getCTP().addNewPPr()
-    if (paragraph.getCTP().getPPr().getShd() != null) paragraph.getCTP().getPPr().unsetShd()
+    val paragraph = getParagraph()
 
     val spacing = if (paragraph.getCTP.getPPr.isSetSpacing) {
       paragraph.getCTP.getPPr.getSpacing

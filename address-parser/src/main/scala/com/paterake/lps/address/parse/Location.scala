@@ -18,6 +18,6 @@ object Location {
   //val font_gujarati_location = "/home/paterake/Downloads/Rekha.ttf"
 
   val subHeaderParagraphHeight = 23
-  val maxLineCount = 29
+  val maxLineCount = 28
 
 }
