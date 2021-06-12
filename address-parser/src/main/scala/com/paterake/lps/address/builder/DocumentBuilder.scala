@@ -16,10 +16,10 @@ class DocumentBuilder(outputFileName: String, clcnTranslation: Map[String, Strin
   private val documentIdx: XWPFDocument = getNewDocument()
 
   private val fontDefault = "Noto Sans"
-  private val fontGujarati = "Noto Sans Gujarati"
-  //private val fontGujarati = "Gujarati Sangam MN"
+  //private val fontGujarati = "Noto Sans Gujarati"
+  private val fontGujarati = "Gujarati Sangam MN"
 
-  private var pageCount = 0
+  private var pageCount = 102
   private var lineCount = 0
   private val clcnNameIdx = new ListBuffer[ModelCfgIndex]()
 
@@ -240,7 +240,7 @@ class DocumentBuilder(outputFileName: String, clcnTranslation: Map[String, Strin
     paragraph.setSpacingBetween(1.3)
 
     val tabStop = paragraph.getCTP().getPPr().addNewTabs().addNewTab();
-    tabStop.setPos("9000")
+    tabStop.setPos(BigInteger.valueOf(9000))
     tabStop.setVal(STTabJc.RIGHT)
 
     clcnText.zipWithIndex.foreach(x => {
@@ -375,10 +375,10 @@ class DocumentBuilder(outputFileName: String, clcnTranslation: Map[String, Strin
     val tab3 = clcnTab.addNewTab()
     val tab4 = clcnTab.addNewTab()
 
-    tab1.setPos("3000")
-    tab2.setPos("5000")
-    tab3.setPos("7800")
-    tab4.setPos("9500")
+    tab1.setPos(BigInteger.valueOf(3000))
+    tab2.setPos(BigInteger.valueOf(5000))
+    tab3.setPos(BigInteger.valueOf(7800))
+    tab4.setPos(BigInteger.valueOf(9500))
 
     tab1.setVal(STTabJc.LEFT)
     tab2.setVal(STTabJc.LEFT)
@@ -398,7 +398,18 @@ class DocumentBuilder(outputFileName: String, clcnTranslation: Map[String, Strin
     run.setText(text)
   }
 
+  def addNameIndexTabHeader(): Unit = {
+    val fontSize = 8
+    val paragraph = getTabbedParagrah()
+    addTabbedIndexEnty(paragraph, "Name (Spouse)", fontDefault, fontSize, false)
+    addTabbedIndexEnty(paragraph, "", fontGujarati, fontSize, true)
+    addTabbedIndexEnty(paragraph, "Gaam (Original Gaam)", fontDefault, fontSize, true)
+    addTabbedIndexEnty(paragraph, "Region", fontDefault, fontSize, true)
+    addTabbedIndexEnty(paragraph, "Page", fontDefault, fontSize, true)
+  }
+
   def addNameIndexTab(): Unit = {
+    addNameIndexTabHeader()
     val fontSize = 8
     clcnNameIdx.sortBy(index => index.mainName).zipWithIndex.foreach(x => {
       val regionName = DocumentUtility.getIndexRegionName(x._1.region)
@@ -411,7 +422,6 @@ class DocumentBuilder(outputFileName: String, clcnTranslation: Map[String, Strin
       addTabbedIndexEnty(paragraph, villageName, fontDefault, fontSize, true)
       addTabbedIndexEnty(paragraph, regionName, fontDefault, fontSize, true)
       addTabbedIndexEnty(paragraph, x._1.pageNumber.toString, fontDefault, fontSize, true)
-
     })
     DocumentUtility.outputFailedTranslation()
   }

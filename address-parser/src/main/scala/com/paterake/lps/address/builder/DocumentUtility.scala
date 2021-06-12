@@ -1,7 +1,7 @@
 package com.paterake.lps.address.builder
 
 import com.paterake.lps.address.cfg.model.{ModelCfgAddress, ModelCfgIndex}
-import com.paterake.lps.address.parse.{LanguageParser, Location}
+import com.paterake.lps.address.parse.Location
 
 import scala.collection.mutable.ListBuffer
 

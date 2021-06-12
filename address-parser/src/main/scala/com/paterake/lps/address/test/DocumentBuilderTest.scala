@@ -8,7 +8,7 @@ import java.io.{File, FileOutputStream}
 class DocumentBuilderTest {
 
   def test(): Unit = {
-    val clcnFontSize = Seq(12, 10)
+    val clcnFontSize = Seq(14, 14)
     val clcnFont = Seq("Helvetica", "Helvetica-Bold")
     val builder = new DocumentBuilder("test.docx", null)
     val document = builder.getDocument()
@@ -25,6 +25,7 @@ class DocumentBuilderTest {
     r2.setText("Text body....")
 
     builder.setSubHeader(Seq("Asta", " (આસ્તા)"), 12)
+    builder.setSubHeader(Seq("આસ્તા", " (આસ્તા)"), 18)
 
     builder.addText(Seq("val1", "val2"), clcnFontSize, clcnFont)
     builder.addText(Seq("val3"), clcnFontSize, clcnFont)
