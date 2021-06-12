@@ -354,6 +354,31 @@ class DocumentBuilder(outputFileName: String, clcnTranslation: Map[String, Strin
     })
   }
 
+  def setIndexEntryLine(): Unit = {
+    val table = documentIdx.createTable(1, 1)
+    table.setWidth("200%")
+
+    table.setTableAlignment(TableRowAlign.CENTER)
+    table.getCTTbl().getTblPr().getTblBorders().getTop().setColor("D3D3D3")
+    table.getCTTbl().getTblPr().getTblBorders().getLeft().setColor("FFFFFF")
+    table.getCTTbl().getTblPr().getTblBorders().getRight().setColor("FFFFFF")
+    table.getCTTbl().getTblPr().getTblBorders().getBottom.setColor("FFFFFF")
+    table.getCTTbl().getTblPr().getTblBorders().getInsideH().setColor("FFFFFF")
+    table.getCTTbl().getTblPr().getTblBorders().getInsideV().setColor("FFFFFF")
+
+    table.getCTTbl().getTblPr().getTblBorders().getTop().setSz(BigInteger.valueOf(10))
+    table.getCTTbl().getTblPr().getTblBorders().getRight().setSz(BigInteger.valueOf(0))
+    table.getCTTbl().getTblPr().getTblBorders().getLeft().setSz(BigInteger.valueOf(0))
+    table.getCTTbl().getTblPr().getTblBorders().getBottom().setSz(BigInteger.valueOf(0))
+    table.getCTTbl().getTblPr().getTblBorders().getInsideH().setSz(BigInteger.valueOf(0))
+    table.getCTTbl().getTblPr().getTblBorders().getInsideV().setSz(BigInteger.valueOf(0))
+
+    val row = table.getRow(0)
+    row.setHeight(1)
+    row.getCtRow().getTrPr().getTrHeightArray(0).setHRule(STHeightRule.EXACT)
+
+  }
+
   def getTabbedParagrah(): XWPFParagraph = {
     val paragraph = documentIdx.createParagraph()
 
