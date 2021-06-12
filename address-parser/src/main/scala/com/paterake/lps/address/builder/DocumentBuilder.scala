@@ -427,7 +427,7 @@ class DocumentBuilder(outputFileName: String, clcnTranslation: Map[String, Strin
     val fontSize = 8
     val paragraph = getTabbedParagrah()
     addTabbedIndexEnty(paragraph, "Name (Spouse)", fontDefault, fontSize, false)
-    addTabbedIndexEnty(paragraph, "", fontGujarati, fontSize, true)
+    addTabbedIndexEnty(paragraph, "Name (in Gujarati)", fontGujarati, fontSize, true)
     addTabbedIndexEnty(paragraph, "Gaam (Original Gaam)", fontDefault, fontSize, true)
     addTabbedIndexEnty(paragraph, "Region", fontDefault, fontSize, true)
     addTabbedIndexEnty(paragraph, "Page", fontDefault, fontSize, true)
