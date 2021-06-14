@@ -356,7 +356,7 @@ class DocumentBuilder(outputFileName: String, clcnTranslation: Map[String, Strin
 
   def setIndexEntryLine(): Unit = {
     val table = documentIdx.createTable(1, 1)
-    table.setWidth("200%")
+    table.setWidth("100%")
 
     table.setTableAlignment(TableRowAlign.CENTER)
     table.getCTTbl().getTblPr().getTblBorders().getTop().setColor("D3D3D3")
@@ -435,6 +435,7 @@ class DocumentBuilder(outputFileName: String, clcnTranslation: Map[String, Strin
 
   def addNameIndexTab(): Unit = {
     addNameIndexTabHeader()
+    setIndexEntryLine
     val fontSize = 8
     clcnNameIdx.sortBy(index => index.mainName).zipWithIndex.foreach(x => {
       val regionName = DocumentUtility.getIndexRegionName(x._1.region)
@@ -447,6 +448,7 @@ class DocumentBuilder(outputFileName: String, clcnTranslation: Map[String, Strin
       addTabbedIndexEnty(paragraph, villageName, fontDefault, fontSize, true)
       addTabbedIndexEnty(paragraph, regionName, fontDefault, fontSize, true)
       addTabbedIndexEnty(paragraph, x._1.pageNumber.toString, fontDefault, fontSize, true)
+      setIndexEntryLine
     })
     DocumentUtility.outputFailedTranslation()
   }
