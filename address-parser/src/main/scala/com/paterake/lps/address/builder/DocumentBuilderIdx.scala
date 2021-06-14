@@ -25,7 +25,6 @@ class DocumentBuilderIdx(outputFileName: String, clcnTranslation: Map[String, St
     run.setFontFamily(DocumentBuilderUtility.fontDefault)
     run.setFontSize(12)
     run.setText(header)
-    paragraph.setBorderBottom(Borders.SINGLE)
   }
 
   def setIndexEntryLine(): Unit = {

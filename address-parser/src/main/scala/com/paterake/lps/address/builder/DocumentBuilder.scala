@@ -1,6 +1,7 @@
 package com.paterake.lps.address.builder
 
 import com.paterake.lps.address.cfg.model.{ModelCfgAddress, ModelCfgIndex}
+import com.paterake.lps.address.cfg.reader.CfgBlank
 import com.paterake.lps.address.parse.Location
 import org.apache.poi.xwpf.usermodel.{ParagraphAlignment, TableRowAlign, XWPFDocument, XWPFParagraph}
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.{STHeightRule, STTabJc}
@@ -12,6 +13,8 @@ import scala.collection.mutable.ListBuffer
 class DocumentBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
 
   private val documentMain: XWPFDocument = DocumentBuilderUtility.getNewDocument()
+  private val cfgBlank = new CfgBlank()
+  private var blankPageCount: Int = 0
 
   def getDocument(): XWPFDocument = {
     documentMain
@@ -21,6 +24,13 @@ class DocumentBuilder(outputFileName: String, clcnTranslation: Map[String, Strin
     val break = DocumentBuilderUtility.getParagraph(documentMain)
     break.setPageBreak(true)
     DocumentBuilderUtility.pageCount += 1
+    if (blankPageCount > 0) {
+      for (x <- 0 to blankPageCount) {
+        break.setPageBreak(true)
+        DocumentBuilderUtility.pageCount += 1
+      }
+      blankPageCount = 0
+    }
   }
 
   def resetLineCount(): Unit = {
@@ -202,6 +212,9 @@ class DocumentBuilder(outputFileName: String, clcnTranslation: Map[String, Strin
     clcnAddressBook.foreach(entry => {
       if (DocumentBuilderUtility.lineCount >= Location.maxLineCount) {
         startNewPage(header, 0)
+      }
+      if (blankPageCount == 0) {
+        blankPageCount = cfgBlank.getBlankPageCount(header, entry(0)._1, entry(1)._1)
       }
       entry.zipWithIndex.foreach(line => {
         if (line._1._1.nonEmpty) {
