@@ -1,6 +1,6 @@
 package com.paterake.lps.address.parse
 
-import com.paterake.lps.address.builder.DocumentBuilder
+import com.paterake.lps.address.builder.{DocumentBuilder, DocumentBuilderIdx}
 import com.paterake.lps.address.cfg.reader.{CfgAddress, CfgRegion}
 
 class AddressParser(cfgAddressName: String, inputFileName: String, outputFileName: String) {
@@ -123,6 +123,7 @@ class AddressParser(cfgAddressName: String, inputFileName: String, outputFileNam
   def processWorkbook(clcnArg: Array[String]): Unit = {
     val clcnTranslation = new LanguageParser().getTranslation(null)
     val docBuilder = new DocumentBuilder(outputFileName, clcnTranslation)
+    val docBuilderIdx = new DocumentBuilderIdx(outputFileName, clcnTranslation)
     val workbook = SpreadsheetReader.openWorkbook(inputFileName, clcnArg)
     workbook.sheetIterator().asScala.foreach(f => {
       val blankPageCount = cfgRegion.getCfgBlankPages(f.getSheetName)
@@ -133,12 +134,13 @@ class AddressParser(cfgAddressName: String, inputFileName: String, outputFileNam
       //println(clcnAddressBook)
       docBuilder.convertToDoc(regionName, clcnCfgAddress, clcnAddressBook)
     })
-    //docBuilder.startNewPage("Index", 0)
-    docBuilder.addNameIndex("Index", 0)
+    docBuilderIdx.addNameIndex("Index", 0)
     if (clcnArg.length == 1) {
       docBuilder.closeDocument(clcnArg(0))
+      docBuilderIdx.closeDocument(clcnArg(0))
     } else {
       docBuilder.closeDocument()
+      docBuilderIdx.closeDocument()
     }
   }
 

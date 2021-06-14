@@ -2,19 +2,19 @@
   {
     "regionName": "birmingham",
     "villageName": "Kothamdi",
-    "person": "Nareshbhai Ranchhodbhai",
+    "memberName": "Nareshbhai Ranchhodbhai",
     "blankPageCount": 1
   },
   {
     "regionName": "birmingham",
     "villageName": "Nizar",
-    "person": "Priyaben Natwarlal",
+    "memberName": "Priyaben Natwarlal",
     "blankPageCount": 1
   },
   {
     "regionName": "bolton",
     "villageName": "Ambheti",
-    "person": "Chottu Ram",
+    "memberName": "Chottu Ram",
     "blankPageCount": 1
   },
   {
@@ -36,13 +36,13 @@
   {
     "regionName": "london",
     "villageName": "Ninat",
-    "person": "Sashi Jiven Nager",
+    "memberName": "Sashi Jiven Nager",
     "blankPageCount": 1
   },
   {
     "regionName": "london",
     "villageName": "Toli",
-    "person": "Tara Nathu",
+    "memberName": "Tara Nathu",
     "blankPageCount": 1
   }
 ]
