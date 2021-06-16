@@ -2,47 +2,69 @@
   {
     "regionName": "birmingham",
     "villageNameMarker": "Kothamdi",
-    "memberNameMarker": "Jayesh Khandubhai",
+    "memberNameMarker": "Nareshbhai Ranchhodbhai",
     "villageName": "Kothamdi",
     "memberName": "Nareshbhai Ranchhodbhai",
     "blankPageCount": 1
   },
   {
     "regionName": "birmingham",
+    "villageNameMarker": "Nizar",
+    "memberNameMarker": "Priyaben Natwarlal",
     "villageName": "Nizar",
     "memberName": "Priyaben Natwarlal",
     "blankPageCount": 1
   },
   {
     "regionName": "bolton",
+    "villageNameMarker": "Ambheti",
+    "memberNameMarker": "Chottu Ram",
     "villageName": "Ambheti",
     "memberName": "Chottu Ram",
     "blankPageCount": 1
   },
   {
     "regionName": "bolton",
+    "villageNameMarker": "Khoj Pardi",
+    "memberNameMarker": "Jason Mahesh",
+    "villageName": "Kothamdi",
+    "blankPageCount": 1
+  },
+
+  {
+    "regionName": "bolton",
+    "villageNameMarker": "Khetia",
+    "memberNameMarker": "Sunil Jaganbhai",
     "villageName": "Khoj Pardi",
     "blankPageCount": 2
   },
   {
     "regionName": "london",
-    "villageName": "Khadchitra",
+    "villageNameMarker": "Karachka",
+    "memberNameMarker": "Savitaben Ambulal",
+    "villageName": "Khad-Chhitra",
     "blankPageCount": 2
   },
   {
     "regionName": "london",
+    "villageNameMarker": "Kuched",
+    "memberNameMarker": "Gulab Govind",
     "villageName": "Kuched",
-    "person": "Gulab Govind",
+    "memberName": "Gulab Govind",
     "blankPageCount": 1
   },
   {
     "regionName": "london",
+    "villageNameMarker": "Ninat",
+    "memberNameMarker": "Sashi Jiven Nager",
     "villageName": "Ninat",
     "memberName": "Sashi Jiven Nager",
     "blankPageCount": 1
   },
   {
     "regionName": "london",
+    "villageNameMarker": "Toli",
+    "memberNameMarker": "Tara Nathu",
     "villageName": "Toli",
     "memberName": "Tara Nathu",
     "blankPageCount": 1

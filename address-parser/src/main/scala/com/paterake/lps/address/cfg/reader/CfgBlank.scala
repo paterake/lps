@@ -15,7 +15,7 @@ class CfgBlank(cfgName: String) extends CfgReader {
 
   def getCfg(regionName: String, villageName: String, memberName: String): List[ModelCfgBlank] = {
     cfg.filter(p => {
-      regionName.toLowerCase.split(" ").head.equals(p.regionName.toLowerCase) &&
+      regionName.toLowerCase.split(" ").head.replaceAll(",", "").equals(p.regionName.toLowerCase) &&
         villageName.toLowerCase.equals(p.villageNameMarker.toLowerCase) &&
         memberName.toLowerCase.startsWith(p.memberNameMarker.toLowerCase)
     })
@@ -23,7 +23,7 @@ class CfgBlank(cfgName: String) extends CfgReader {
 
   def getBlankPageCount(regionName: String, villageName: String, memberName: String): Int = {
     val entry = getCfg(regionName, villageName, memberName)
-    if (entry != null && entry.head != null) {
+    if (entry.nonEmpty) {
       entry.head.blankPageCount
     } else {
       0

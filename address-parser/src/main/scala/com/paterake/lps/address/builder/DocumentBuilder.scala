@@ -20,14 +20,17 @@ class DocumentBuilder(outputFileName: String, clcnTranslation: Map[String, Strin
     documentMain
   }
 
-  def setPageBreak(): Unit = {
+  def insertPageBreak(): Unit = {
     val break = DocumentBuilderUtility.getParagraph(documentMain)
     break.setPageBreak(true)
     DocumentBuilderUtility.pageCount += 1
+  }
+
+  def setPageBreak(): Unit = {
+    insertPageBreak()
     if (blankPageCount > 0) {
-      for (x <- 0 to blankPageCount) {
-        break.setPageBreak(true)
-        DocumentBuilderUtility.pageCount += 1
+      for (x <- 1 to blankPageCount) {
+        insertPageBreak()
       }
       blankPageCount = 0
     }
@@ -41,8 +44,8 @@ class DocumentBuilder(outputFileName: String, clcnTranslation: Map[String, Strin
     DocumentBuilderUtility.lineCount += 1
   }
 
-  def startNewPage(header: String, blankPageCount: Int): Unit = {
-    for (x <- 0 to blankPageCount) {
+  def startNewPage(header: String, emptyPageCount: Int): Unit = {
+    for (x <- 0 to emptyPageCount) {
       setPageBreak()
     }
     val paragraph = DocumentBuilderUtility.getParagraph(documentMain)
