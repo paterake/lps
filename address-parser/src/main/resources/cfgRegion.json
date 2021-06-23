@@ -11,19 +11,19 @@
   {
     "regionName": "birmingham",
     "rename": "Birmingham, West Bromwich & Dudley",
-    "blankPageCount": 5
+    "blankPageCount": 6
   },
   {
     "regionName": "bolton",
-    "blankPageCount": 7
+    "blankPageCount": 9
   },
   {
     "regionName": "coventry",
-    "blankPageCount": 7
+    "blankPageCount": 8
   },
   {
     "regionName": "darlaston",
-    "blankPageCount": 5
+    "blankPageCount": 6
   },
   {
     "regionName": "leicester",
@@ -31,11 +31,11 @@
   },
   {
     "regionName": "london",
-    "blankPageCount": 12
+    "blankPageCount": 11
   },
   {
     "regionName": "loughborough",
-    "blankPageCount": 4
+    "blankPageCount": 5
   },
   {
     "regionName": "luton",
@@ -43,19 +43,19 @@
   },
   {
     "regionName": "preston",
-    "blankPageCount": 4
+    "blankPageCount": 5
   },
   {
     "regionName": "walsall",
-    "blankPageCount": 6
+    "blankPageCount": 8
   },
   {
     "regionName": "wellingborough",
-    "blankPageCount": 6
+    "blankPageCount": 8
   },
   {
     "regionName": "yorkshire",
-    "blankPageCount": 6
+    "blankPageCount": 8
   },
   {
     "regionName": "rest",
