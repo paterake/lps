@@ -12,7 +12,7 @@ object DocumentBuilderUtility {
   //val fontGujarati = "Noto Sans Gujarati"
   val fontGujarati = "Gujarati Sangam MN"
 
-  var pageCount = 104
+  var pageCount = 0
   var lineCount = 0
   val clcnNameIdx = new ListBuffer[ModelCfgIndex]()
 

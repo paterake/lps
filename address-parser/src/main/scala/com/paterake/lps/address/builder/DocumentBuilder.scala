@@ -26,16 +26,6 @@ class DocumentBuilder(outputFileName: String, clcnTranslation: Map[String, Strin
     DocumentBuilderUtility.pageCount += 1
   }
 
-  def setPageBreak(): Unit = {
-    insertPageBreak()
-    if (blankPageCount > 0) {
-      for (x <- 1 to blankPageCount) {
-        insertPageBreak()
-      }
-      blankPageCount = 0
-    }
-  }
-
   def resetLineCount(): Unit = {
     DocumentBuilderUtility.lineCount = 0
   }
@@ -46,7 +36,13 @@ class DocumentBuilder(outputFileName: String, clcnTranslation: Map[String, Strin
 
   def startNewPage(header: String, emptyPageCount: Int): Unit = {
     for (x <- 0 to emptyPageCount) {
-      setPageBreak()
+      insertPageBreak()
+    }
+    if (blankPageCount > 0) {
+      for (x <- 1 to blankPageCount) {
+        insertPageBreak()
+      }
+      blankPageCount = 0
     }
     val paragraph = DocumentBuilderUtility.getParagraph(documentMain)
     paragraph.setAlignment(ParagraphAlignment.CENTER)
