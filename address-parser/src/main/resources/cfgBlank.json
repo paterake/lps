@@ -18,9 +18,9 @@
   {
     "regionName": "bolton",
     "villageNameMarker": "Ambheti",
-    "memberNameMarker": "Chottu Ram",
+    "memberNameMarker": "Chhotubhai Rambhai",
     "villageName": "Ambheti",
-    "memberName": "Chottu Ram",
+    "memberName": "Chhotubhai Rambhai",
     "blankPageCount": 1
   },
   {
@@ -48,25 +48,25 @@
   {
     "regionName": "london",
     "villageNameMarker": "Kuched",
-    "memberNameMarker": "Gulab Govind",
+    "memberNameMarker": "Gulabbhai Govindji",
     "villageName": "Kuched",
-    "memberName": "Gulab Govind",
+    "memberName": "Gulabbhai Govindji",
     "blankPageCount": 1
   },
   {
     "regionName": "london",
     "villageNameMarker": "Ninat",
-    "memberNameMarker": "Sashi Jiven Nager",
+    "memberNameMarker": "Shashikant Jivanbhai",
     "villageName": "Ninat",
-    "memberName": "Sashi Jiven Nager",
+    "memberName": "Shashikant Jivanbhai",
     "blankPageCount": 1
   },
   {
     "regionName": "london",
     "villageNameMarker": "Toli",
-    "memberNameMarker": "Tara Nathu",
+    "memberNameMarker": "Taramati Lallubhai",
     "villageName": "Toli",
-    "memberName": "Tara Nathu",
+    "memberName": "Taramati Lallubhai",
     "blankPageCount": 1
   }
 ]
