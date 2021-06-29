@@ -68,7 +68,12 @@ object DocumentUtility {
         val mainName = entry(1)._1.split(" ").filterNot(p => clcnIndexNameDrop.contains(p.toLowerCase)).mkString(" ")
         val spouseName = entry(2)._1.split(" ").filterNot(p => clcnIndexNameDrop.contains(p.toLowerCase)).head
         val village = entry(0)._1
-        val spouseVillage = null
+        val spouseVillage =
+          if (mainName.endsWith(")")) {
+            mainName.split(" ").reverse.head.stripSuffix(")").stripPrefix("(")
+          } else {
+            null
+          }
         ModelCfgIndex(stripNameSuffix(mainName), stripNameSuffix(spouseName), village, spouseVillage, header, pageCount)
       } else {
         val mainName = entry(2)._1.split(" ").filterNot(p => clcnIndexNameDrop.contains(p.toLowerCase)).mkString(" ")
@@ -140,7 +145,7 @@ object DocumentUtility {
         tmpName
       }
       if (idxName.length > 24) {
-        println(idxName)
+        //println(idxName)
       }
       idxName
     } else if (mainName.length > 24) {
@@ -160,9 +165,9 @@ object DocumentUtility {
     (indexName, translation)
   }
 
-  def getIndexVillageName(mainVillageName: String, spouseVillageName: String): String = {
+  def getIndexVillageName(mainVillageName: String, spouseVillageName: String, clcnVillage: List[String]): String = {
     val villageName =
-      if (spouseVillageName == null || spouseVillageName.length < 1) {
+      if (spouseVillageName == null || spouseVillageName.length < 1 || !clcnVillage.contains(spouseVillageName)) {
         mainVillageName
       } else {
         mainVillageName + " (" + spouseVillageName.replaceAll("[\\[\\](){}]", "") + ")"

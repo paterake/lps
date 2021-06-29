@@ -252,7 +252,7 @@ class PdfBuilder(outputFileName: String, clcnTranslation: Map[String, String]) {
     clcnNameIdx.sortBy(index => index.mainName).foreach(x => {
       val regionName = DocumentUtility.getIndexRegionName(x.region)
       val indexName = DocumentUtility.getIndexName(clcnTranslation, x.mainName.replaceAll("\\(.*?\\)", ""), x.spouseName.replaceAll("\\(.*?\\)", ""))
-      val villageName = DocumentUtility.getIndexVillageName(x.mainVillageName, x.spouseVillageName)
+      val villageName = DocumentUtility.getIndexVillageName(x.mainVillageName, x.spouseVillageName, null)
 
       val txtMainName = new Text(indexName._1).setFont(font)
       val txtTranslation = new Text(indexName._2).setFont(font_gujarati)

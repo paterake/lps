@@ -98,10 +98,11 @@ class DocumentBuilderIdx(outputFileName: String, clcnTranslation: Map[String, St
     addNameIndexTabHeader()
     setIndexEntryLine
     val fontSize = 8
+    val clcnVillage = DocumentBuilderUtility.getClcnVillage()
     DocumentBuilderUtility.clcnNameIdx.sortBy(index => index.mainName).zipWithIndex.foreach(x => {
       val regionName = DocumentUtility.getIndexRegionName(x._1.region)
       val indexName = DocumentUtility.getIndexName(clcnTranslation, x._1.mainName.replaceAll("\\(.*?\\)", ""), x._1.spouseName.replaceAll("\\(.*?\\)", ""))
-      val villageName = DocumentUtility.getIndexVillageName(x._1.mainVillageName, x._1.spouseVillageName)
+      val villageName = DocumentUtility.getIndexVillageName(x._1.mainVillageName, x._1.spouseVillageName, clcnVillage)
 
       val paragraph = getTabbedParagrah()
       addTabbedIndexEnty(paragraph, indexName._1, DocumentBuilderUtility.fontDefault, fontSize, false)

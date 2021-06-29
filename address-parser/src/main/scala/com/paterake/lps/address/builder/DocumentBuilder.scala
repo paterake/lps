@@ -1,6 +1,6 @@
 package com.paterake.lps.address.builder
 
-import com.paterake.lps.address.cfg.model.{ModelCfgAddress, ModelCfgIndex}
+import com.paterake.lps.address.cfg.model.ModelCfgAddress
 import com.paterake.lps.address.cfg.reader.CfgBlank
 import com.paterake.lps.address.parse.Location
 import org.apache.poi.xwpf.usermodel.{ParagraphAlignment, TableRowAlign, XWPFDocument, XWPFParagraph}
@@ -230,6 +230,15 @@ class DocumentBuilder(outputFileName: String, clcnTranslation: Map[String, Strin
               addText(Seq(line._1._1), Seq(fontSize), Seq(font))
             } else {
               addText(Seq(line._1._1, line._1._2), Seq(fontSize, fontRightSize), Seq(font, fontRight))
+              if ((line._2 == 4) && (line._1._1.length > 70)) {
+                println("Address: "  + header + ":" + entry(0)._1 + ":" + line._1._1 + " (" + line._1._1.length + ")")
+              }
+              if ((line._2 == 1) && (line._1._1.length > 50)) {
+                println("Main Member: " + header + ":" + entry(0)._1 + ":" + line._1._1 + " (" + line._1._1.length + ")")
+              }
+              if ((line._2 == 2) && (line._1._1.length > 55)) {
+                println("Spouse: "  + header + ":" + entry(0)._1 + ":" +  line._1._1 + " (" + line._1._1.length + ")")
+              }
             }
           }
           if (clcnCfgAddress(line._2).indexInd) {

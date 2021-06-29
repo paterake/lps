@@ -16,7 +16,6 @@ object DocumentBuilderUtility {
   var lineCount = 0
   val clcnNameIdx = new ListBuffer[ModelCfgIndex]()
 
-
   def registerFont(fontLocation: String): Unit = {
     val ge = GraphicsEnvironment.getLocalGraphicsEnvironment()
     val is = new FileInputStream(fontLocation)
@@ -65,6 +64,10 @@ object DocumentBuilderUtility {
 
   def appendNameIndex(entry: ModelCfgIndex): Unit = {
     clcnNameIdx.append(entry)
+  }
+
+  def getClcnVillage(): List[String] = {
+    clcnNameIdx.map(x => x.mainVillageName).toList.distinct
   }
 
 }

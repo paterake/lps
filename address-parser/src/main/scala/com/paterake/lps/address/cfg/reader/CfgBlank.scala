@@ -24,7 +24,7 @@ class CfgBlank(cfgName: String) extends CfgReader {
   def getBlankPageCount(regionName: String, villageName: String, memberName: String): Int = {
     val entry = getCfg(regionName, villageName, memberName)
     if (entry.nonEmpty) {
-      println(regionName + ":" + villageName + ":" + memberName + "=" + entry.head.blankPageCount)
+      //println(regionName + ":" + villageName + ":" + memberName + "=" + entry.head.blankPageCount)
       entry.head.blankPageCount
     } else {
       0
