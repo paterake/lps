@@ -31,9 +31,15 @@ public class PdfBoxExample {
 
         // Define a text content stream using the selected font, moving the cursor and drawing the text "Hello World"
         contentStream.beginText();
+        contentStream.setFont( PDType1Font.HELVETICA, 12 );
+        contentStream.setLeading(14.5f);
+        contentStream.newLineAtOffset(100, 700);
+        //contentStream.moveTextPositionByAmount( 100, 700 );
+        contentStream.newLine();
+        contentStream.showText("Hello World");
+        contentStream.newLine();
         contentStream.setFont( fontGujarati, 12 );
-        contentStream.moveTextPositionByAmount( 100, 700 );
-        contentStream.drawString( "(આસ્તા)" );
+        contentStream.showText( "(આસ્તા)" );
         contentStream.endText();
 
         // Make sure that the content stream is closed:
