@@ -234,10 +234,10 @@ class DocumentBuilder(outputFileName: String, clcnTranslation: Map[String, Strin
                 println("Address: "  + header + ":" + entry(0)._1 + ":" + line._1._1 + " (" + line._1._1.length + ")")
               }
               if ((line._2 == 1) && (line._1._1.length > 50)) {
-                println("Main Member: " + header + ":" + entry(0)._1 + ":" + line._1._1 + " (" + line._1._1.length + ")")
+                //println("Main Member: " + header + ":" + entry(0)._1 + ":" + line._1._1 + " (" + line._1._1.length + ")")
               }
               if ((line._2 == 2) && (line._1._1.length > 55)) {
-                println("Spouse: "  + header + ":" + entry(0)._1 + ":" +  line._1._1 + " (" + line._1._1.length + ")")
+                //println("Spouse: "  + header + ":" + entry(0)._1 + ":" +  line._1._1 + " (" + line._1._1.length + ")")
               }
             }
           }

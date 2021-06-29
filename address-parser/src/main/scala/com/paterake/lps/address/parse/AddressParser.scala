@@ -10,6 +10,8 @@ class AddressParser(cfgAddressName: String, inputFileName: String, outputFileNam
   private val clcnCfgAddress = new CfgAddress(cfgAddressName).getCfg()
   private val cfgRegion = new CfgRegion()
   private val mainNameIndex = 2
+  private val clcnAddressDrop = scala.io.Source.fromInputStream(getClass.getResourceAsStream(Location.addressDrop)).getLines.toList.sorted
+
 
   def outputAddressCfg(): Unit = {
     clcnCfgAddress.foreach(line => {
@@ -63,7 +65,7 @@ class AddressParser(cfgAddressName: String, inputFileName: String, outputFileNam
     formattedEntry
   }
 
-  def getEntry(addressLine: (Int, Seq[(Int, String)]), clcnLineElement: List[String], clcnParenthesis: List[String], elementSeparator: String, fontCase: String, dropSurname: Boolean, surname: String, singleInd: Boolean, singleIdx: Int): String = {
+  def getEntry(lineId: Int, addressLine: (Int, Seq[(Int, String)]), clcnLineElement: List[String], clcnParenthesis: List[String], elementSeparator: String, fontCase: String, dropSurname: Boolean, surname: String, singleInd: Boolean, singleIdx: Int): String = {
     if (clcnLineElement == null || clcnLineElement.isEmpty) {
       null
     } else {
@@ -85,7 +87,25 @@ class AddressParser(cfgAddressName: String, inputFileName: String, outputFileNam
       } else {
         clcnEntry.filter(p => p.nonEmpty).mkString(elementSeparator)
       }
-      entry
+      if (lineId != 4) {
+        entry
+      } else if (lineId == 4 && entry.length <= 70) {
+        entry
+      } else if (lineId == 4 && entry.length > 70) {
+        var replacement = entry
+        clcnAddressDrop.foreach(x => {
+          replacement = replacement.replaceAll(x, "")
+        })
+        replacement = replacement.replaceAll("Uxbridge, Middlesex", "Uxbridge")
+        replacement = replacement.replaceAll("Benfleet, Essex", "Benfleet")
+        replacement = replacement.replaceAll("Buckinghamshire", "Bucks")
+        replacement = replacement.split(",").filterNot(p => p.trim.equals("")).map(x => x.trim).mkString(", ")
+        //println("replaced: " + entry)
+        //println("    with: " + replacement)
+        replacement
+      } else {
+        entry
+      }
     }
   }
 
@@ -94,8 +114,8 @@ class AddressParser(cfgAddressName: String, inputFileName: String, outputFileNam
       .replaceAll("\\(.*?\\)", "")
       .split(" ").filterNot(p => p.equals("(Late)")).reverse.head
     val entry = clcnCfgAddress.sortBy(line => line.lineId).map(cfg => {
-      val leftEntry = getEntry(addressLine, cfg.clcnLineElement, cfg.clcnParenthesis, cfg.elementSeparator, cfg.fontCase, cfg.dropSurname, surname, cfg.singleInd, cfg.singleIdx)
-      val rightEntry = getEntry(addressLine, cfg.clcnLineElementRight, cfg.clcnParenthesis, cfg.elementSeparatorRight, cfg.fontCase, cfg.dropSurname, surname, cfg.singleIndRight, cfg.singleIdxRight)
+      val leftEntry = getEntry(cfg.lineId, addressLine, cfg.clcnLineElement, cfg.clcnParenthesis, cfg.elementSeparator, cfg.fontCase, cfg.dropSurname, surname, cfg.singleInd, cfg.singleIdx)
+      val rightEntry = getEntry(cfg.lineId, addressLine, cfg.clcnLineElementRight, cfg.clcnParenthesis, cfg.elementSeparatorRight, cfg.fontCase, cfg.dropSurname, surname, cfg.singleIndRight, cfg.singleIdxRight)
       (leftEntry, rightEntry)
     })
     //println(entry)
