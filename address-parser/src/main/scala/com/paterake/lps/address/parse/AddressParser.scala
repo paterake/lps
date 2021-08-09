@@ -154,7 +154,7 @@ class AddressParser(cfgAddressName: String, inputFileName: String, outputFileNam
       //println(clcnAddressBook)
       docBuilder.convertToDoc(regionName, clcnCfgAddress, clcnAddressBook)
     })
-    docBuilderIdx.addNameIndex("Index", 4)
+    docBuilderIdx.addNameIndex("Index", 1)
     if (clcnArg.length == 1) {
       docBuilder.closeDocument(clcnArg(0))
       docBuilderIdx.closeDocument(clcnArg(0))

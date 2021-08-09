@@ -6,60 +6,60 @@
   {
     "regionName": "bilston",
     "rename": "Bilston, Wolverhampton & Willenhall",
-    "blankPageCount": 104
+    "blankPageCount": 69
   },
   {
     "regionName": "birmingham",
     "rename": "Birmingham, West Bromwich & Dudley",
-    "blankPageCount": 6
+    "blankPageCount": 5
   },
   {
     "regionName": "bolton",
-    "blankPageCount": 9
-  },
-  {
-    "regionName": "coventry",
-    "blankPageCount": 9
-  },
-  {
-    "regionName": "darlaston",
-    "blankPageCount": 6
-  },
-  {
-    "regionName": "leicester",
-    "blankPageCount": 5
-  },
-  {
-    "regionName": "london",
-    "blankPageCount": 12
-  },
-  {
-    "regionName": "loughborough",
-    "blankPageCount": 5
-  },
-  {
-    "regionName": "luton",
     "blankPageCount": 4
   },
   {
+    "regionName": "coventry",
+    "blankPageCount": 2
+  },
+  {
+    "regionName": "darlaston",
+    "blankPageCount": 4
+  },
+  {
+    "regionName": "leicester",
+    "blankPageCount": 2
+  },
+  {
+    "regionName": "london",
+    "blankPageCount": 9
+  },
+  {
+    "regionName": "loughborough",
+    "blankPageCount": 1
+  },
+  {
+    "regionName": "luton",
+    "blankPageCount": 3
+  },
+  {
     "regionName": "preston",
-    "blankPageCount": 5
+    "blankPageCount": 2
   },
   {
     "regionName": "walsall",
-    "blankPageCount": 8
+    "blankPageCount": 4
   },
   {
     "regionName": "wellingborough",
-    "blankPageCount": 8
+    "blankPageCount": 4
   },
   {
     "regionName": "yorkshire",
-    "blankPageCount": 8
+    "blankPageCount": 5
   },
   {
     "regionName": "rest",
-    "blankPageCount": 3
+    "blankPageCount": 1
   },
   { "regionName": "sheet16",
     "rename": "",
