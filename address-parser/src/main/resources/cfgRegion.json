@@ -15,11 +15,11 @@
   },
   {
     "regionName": "bolton",
-    "blankPageCount": 4
+    "blankPageCount": 5
   },
   {
     "regionName": "coventry",
-    "blankPageCount": 2
+    "blankPageCount": 3
   },
   {
     "regionName": "darlaston",
@@ -35,7 +35,7 @@
   },
   {
     "regionName": "loughborough",
-    "blankPageCount": 1
+    "blankPageCount": 2
   },
   {
     "regionName": "luton",

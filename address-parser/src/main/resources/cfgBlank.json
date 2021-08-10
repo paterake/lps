@@ -9,14 +9,6 @@
   },
   {
     "regionName": "birmingham",
-    "villageNameMarker": "Kothamdi",
-    "memberNameMarker": "Nareshbhai Ranchhodbhai",
-    "villageName": "Kothamdi",
-    "memberName": "Nareshbhai Ranchhodbhai",
-    "blankPageCount": 1
-  },
-  {
-    "regionName": "birmingham",
     "villageNameMarker": "Nizar",
     "memberNameMarker": "Priya Natwarlal",
     "villageName": "Nizar",
@@ -37,13 +29,6 @@
     "memberNameMarker": "Sureshchandra Lalbhai",
     "villageName": "Kothamdi",
     "memberName": "Sureshchandra Lalbhai",
-    "blankPageCount": 1
-  },
-  {
-    "regionName": "bolton",
-    "villageNameMarker": "Khoj Pardi",
-    "memberNameMarker": "Jason Mahesh",
-    "villageName": "Kothamdi",
     "blankPageCount": 1
   },
   {
@@ -74,14 +59,6 @@
     "memberNameMarker": "Rashmikant Becharbhai",
     "villageName": "Ninat",
     "memberName": "Rashmikant Becharbhai",
-    "blankPageCount": 1
-  },
-  {
-    "regionName": "london",
-    "villageNameMarker": "Ninat",
-    "memberNameMarker": "Shashikant Jivanbhai",
-    "villageName": "Ninat",
-    "memberName": "Shashikant Jivanbhai",
     "blankPageCount": 1
   },
   {
