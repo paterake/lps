@@ -92,16 +92,15 @@ class AddressParser(cfgAddressName: String, inputFileName: String, outputFileNam
       } else if (lineId == 4 && entry.length <= 70) {
         entry
       } else if (lineId == 4 && entry.length > 70) {
-        var replacement = entry
-        clcnAddressDrop.foreach(x => {
-          replacement = replacement.replaceAll(x, "")
-        })
+        val clcnAddress = entry.split(",")
+        var replacement = clcnAddress.map(x => x.trim).filter(p => !clcnAddressDrop.contains(p.trim)).mkString(", ")
         replacement = replacement.replaceAll("Uxbridge, Middlesex", "Uxbridge")
         replacement = replacement.replaceAll("Benfleet, Essex", "Benfleet")
         replacement = replacement.replaceAll("Buckinghamshire", "Bucks")
+        replacement = replacement.stripPrefix("Plot ")
         replacement = replacement.split(",").filterNot(p => p.trim.equals("")).map(x => x.trim).mkString(", ")
-        //println("replaced: " + entry)
-        //println("    with: " + replacement)
+        println("replaced: " + entry)
+        println("    with: " + replacement)
         replacement
       } else {
         entry

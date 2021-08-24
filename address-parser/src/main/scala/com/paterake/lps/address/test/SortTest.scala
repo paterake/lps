@@ -17,4 +17,10 @@ object SortTest extends App {
 
   println(DocumentUtility.stripNameSuffix("Ramkumari"))
 
+  var address = "The Briars,  254,  Swakeleys Road,  Ickenham,  Uxbridge,  Middlesex,  UB10 8AU"
+  address = address.replaceAll("Uxbridge,  Middlesex", "Uxbridge")
+  println(address)
+
+
+
 }
