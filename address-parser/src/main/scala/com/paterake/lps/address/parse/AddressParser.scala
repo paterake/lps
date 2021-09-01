@@ -99,8 +99,8 @@ class AddressParser(cfgAddressName: String, inputFileName: String, outputFileNam
         replacement = replacement.replaceAll("Buckinghamshire", "Bucks")
         replacement = replacement.stripPrefix("Plot ")
         replacement = replacement.split(",").filterNot(p => p.trim.equals("")).map(x => x.trim).mkString(", ")
-        println("replaced: " + entry)
-        println("    with: " + replacement)
+        //println("replaced: " + entry)
+        //println("    with: " + replacement)
         replacement
       } else {
         entry
